@@ -9,7 +9,7 @@ services:
     name: components-web
     region: frankfurt
     runtime: ruby
-    plan: standard
+    plan: starter
     buildCommand: "./bin/render-build.sh"
     preDeployCommand: "bundle exec rails db:migrate && bundle exec rails db:seed"
     startCommand: "bundle exec rails server"
