@@ -24,7 +24,7 @@ services:
           type: redis
           name: oxteam-cache
           property: connectionString
-      - fromGroup: spree-settings
+      - fromGroup: components-settings
 
 envVarGroups:
   - name: components-settings
