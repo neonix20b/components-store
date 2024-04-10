@@ -25,6 +25,8 @@ services:
           type: redis
           name: oxteam-cache
           property: connectionString
+      - key: WEB_CONCURRENCY
+        value: 2
       - fromGroup: components-settings
       - fromGroup: oxteam-settings
 
