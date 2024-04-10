@@ -579,6 +579,7 @@ DEPENDENCIES
   image_processing (~> 1.2)
   importmap-rails
   jbuilder
+  mini_magick
   mission_control-jobs
   pg (~> 1.1)
   puma (>= 5.0)
