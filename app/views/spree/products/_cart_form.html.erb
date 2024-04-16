@@ -30,10 +30,12 @@
         <% if should_display_compare_at_price?(default_variant) %>
           <span class="compare-at-price mr-3"><%= display_compare_at_price(default_variant) %></span>
         <% end %>
-        <span class="price selling" content="<%= @product_price.to_d %>">
-          <%= display_price(default_variant) %>
-        </span>
-        <span content="<%= current_currency %>"></span>
+        <% if @product_price.to_d > 1 %>
+          <span class="price selling" content="<%= @product_price.to_d %>">
+            <%= display_price(default_variant) %>
+          </span>
+          <span content="<%= current_currency %>"></span>
+        <%end%>
       </div>
     <% end %>
 
