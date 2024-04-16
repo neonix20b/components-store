@@ -428,6 +428,7 @@ ru:
     add_stock_management: "Добавить управление запасами"
     add_to_cart: "Добавить в корзину"
     add_variant: "Добавить вариант"
+    added_to_cart: "Добавлено в корзину!"
     additional_item: "Ставка для дополнительных наименований"
     address1: "Адрес"
     address2: "адрес (продолж.)"
@@ -554,8 +555,12 @@ ru:
     card_type_is: "Тип карты"
     cart: "Корзина"
     cart_page:
+      add_promo_code: "Добавить промокод"
+      checkout: "Продолжить оплату"
       empty_info: "Корзина пуста"
       header: "Корзина"
+      product: "Товар"
+      quantity: "Кол-во"
       title: "Корзина"
     cart_subtotal:
     categories: "Категории"
@@ -564,6 +569,10 @@ ru:
     charged: "Изменен"
     check_for_spree_alerts: "Проверить оповещения Spree"
     checkout: "Оформление заказа"
+    checkout_page:
+      back_to_cart: "Назад в корзину"
+      delivery_method: Способ доставки
+      header: Финализирование
     choose_a_customer: "Выберите клиента"
     choose_a_taxon_to_sort_products_for: "Выберите таксон для сортировки товаров"
     choose_currency: "Выбрать валюту"
@@ -1044,6 +1053,9 @@ ru:
       void: "Аннулирован"
     payment_updated: "Платёж обновлён"
     payments: "Платежи"
+    pdp:
+      checkout: "Оформление заказа"
+      view_cart: "Просмотреть корзину"
     pending: "В ожидании"
     pending_sale: "Ожидание продаж"
     percent: "Процент"

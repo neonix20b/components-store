@@ -10,12 +10,10 @@
         <% end %>
       </div>
       <div class="card-footer text-center">
-        <% if !price.nil? and price.to_d > 1 %>
-          <span class="price selling lead" content="<%= price.nil? ? 0 : price.to_d %>">
-            <%= display_price(product) %>
-          </span>
-          <span content="<%= current_currency %>"></span>
-        <%end%>
+        <span class="price selling lead" content="<%= price.nil? ? 0 : price.to_d %>">
+          <%= display_price(product) %>
+        </span>
+        <span content="<%= current_currency %>"></span>
       </div>
     <% end %>
   </div>
