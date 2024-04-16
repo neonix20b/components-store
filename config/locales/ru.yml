@@ -556,11 +556,11 @@ ru:
     cart: "Корзина"
     cart_page:
       add_promo_code: "Добавить промокод"
-      checkout: "Продолжить оплату"
+      checkout: "Перейти к оплате"
       empty_info: "Корзина пуста"
       header: "Корзина"
       product: "Товар"
-      quantity: "Кол-во"
+      quantity: "Количество"
       title: "Корзина"
     cart_subtotal:
     categories: "Категории"
@@ -1065,7 +1065,16 @@ ru:
     place_order: "Разместить заказ"
     please_define_payment_methods: "Сначала определите способ оплаты."
     plp:
-      home: "Главная"
+      default: По умолчанию
+      done: Применить
+      home: Главная
+      name_z_a: По названию (Я-А)
+      name_a_z: По названию (А-Я)
+      newest_first: Сначала новые
+      price: Цена
+      price_high_to_low: Цена по убыв.
+      price_low_to_high: Цена по возр.
+      sort_by: Сортировка
     populate_get_error: "Что-то пошло не так. Попробуйте добавить товар еще раз."
     powered_by: "Работает на"
     pre_tax_amount:
