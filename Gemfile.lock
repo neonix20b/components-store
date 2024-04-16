@@ -101,8 +101,8 @@ GIT
 
 GIT
   remote: https://github.com/spree/spree_rails_frontend.git
-  revision: 13c9c81023b55f4d6ada0b699746260c45c2d1e9
-  branch: 4-7-stable
+  revision: 6f6a77e66d1d51fa568e02cce968fd307ffed21a
+  branch: main
   specs:
     spree_frontend (4.7.0)
       babel-transpiler (~> 0.7)
@@ -110,14 +110,15 @@ GIT
       canonical-rails (~> 0.2, >= 0.2.10)
       flag-icons-rails (~> 3.4)
       glyphicons (~> 1.0)
+      importmap-rails
       inline_svg (~> 1.5)
       jquery-rails (~> 4.3)
-      jsbundling-rails
       responders
       sass-rails (>= 5)
       spree_api (>= 4.7.0)
       spree_core (>= 4.7.0)
       sprockets (~> 4.0)
+      stimulus-rails
       turbo-rails
 
 GEM
@@ -332,8 +333,6 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (7.0.0)
       railties (>= 3.2.16)
-    jsbundling-rails (1.3.0)
-      railties (>= 6.0.0)
     jsonapi-serializer (2.2.0)
       activesupport (>= 4.2)
     kaminari (1.2.2)
@@ -464,10 +463,10 @@ GEM
       psych (>= 4.0.0)
     redis (5.2.0)
       redis-client (>= 0.22.0)
-    redis-client (0.22.0)
+    redis-client (0.22.1)
       connection_pool
     regexp_parser (2.9.0)
-    reline (0.5.1)
+    reline (0.5.2)
       io-console (~> 0.5)
     request_store (1.6.0)
       rack (>= 1.4)
