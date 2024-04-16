@@ -1074,7 +1074,7 @@ ru:
       price: Цена
       price_high_to_low: Цена по убыв.
       price_low_to_high: Цена по возр.
-      sort_by: Сортировка
+      sort_by: Сортировать
     populate_get_error: "Что-то пошло не так. Попробуйте добавить товар еще раз."
     powered_by: "Работает на"
     pre_tax_amount:
