@@ -75,7 +75,7 @@ gem "mission_control-jobs"
 gem "solid_cache"
 
 # Spree gems
-spree_opts = { github: "spree/spree", branch: "main"}
+spree_opts = { github: "spree/spree", branch: "4-7-stable"}
 gem "spree", spree_opts
 gem "spree_emails", spree_opts
 gem "spree_sample",  spree_opts
