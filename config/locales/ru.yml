@@ -512,6 +512,7 @@ ru:
     author_name: "Имя автора"
     auto_capture: "Автозахват"
     available: "Доступно"
+    availability: "Количество"
     available_on: "Доступно с"
     average_order_value: "Средняя сумма заказа"
     avs_response:
@@ -1314,7 +1315,6 @@ ru:
       accepted: "Подтверждён"
       address: "Заполнение адреса"
       authorized: "Авторизован"
-      availability: "Количество"
       awaiting: "В ожидании"
       awaiting_return: "В ожидании возврата"
       backordered: "Предзаказан"
