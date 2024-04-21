@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: https://github.com/spree/spree.git
-  revision: d3927a3f646f0b4e72b137bf72606c885ec59829
+  revision: 436b462e97e367c72f49d728f18b59e513fe6286
   branch: main
   specs:
     spree (4.8.0.beta)
@@ -222,8 +222,8 @@ GEM
     awesome_nested_set (3.6.0)
       activerecord (>= 4.0.0, < 7.2)
     aws-eventstream (1.3.0)
-    aws-partitions (1.913.0)
-    aws-sdk-core (3.191.6)
+    aws-partitions (1.916.0)
+    aws-sdk-core (3.192.1)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.8)
@@ -231,8 +231,8 @@ GEM
     aws-sdk-kms (1.79.0)
       aws-sdk-core (~> 3, >= 3.191.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.146.1)
-      aws-sdk-core (~> 3, >= 3.191.0)
+    aws-sdk-s3 (1.147.0)
+      aws-sdk-core (~> 3, >= 3.192.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.8)
     aws-sigv4 (1.8.0)
