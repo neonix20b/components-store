@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get '/t/redirect/:page', to: redirect('/pages/%{page}')
   # This line mounts Spree's routes at the root of your application.
   # This means, any requests to URLs such as /products, will go to
   # Spree::ProductsController.
