@@ -59,6 +59,11 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+  gem 'smarter_csv'
+  # gem 'kramdown'
+  gem 'redcarpet'
+  gem 'langchainrb'
+  gem "ruby-openai"
 end
 
 group :test do
@@ -88,3 +93,4 @@ gem "spree_i18n"
 # only needed for MacOS and Ruby 3.0
 gem 'sassc', github: 'sass/sassc-ruby', branch: 'master'
 gem "aws-sdk-s3", require: false
+gem 'csv'

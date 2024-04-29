@@ -35,6 +35,8 @@ services:
     healthCheckPath: /up
     domains:
      - 'components.oxteam.me'
+     - 'smart-components.store'
+     - 'smart-components.pro'
     envVars:
       - key: DATABASE_URL
         fromDatabase:
