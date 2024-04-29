@@ -94,3 +94,4 @@ gem "spree_i18n"
 gem 'sassc', github: 'sass/sassc-ruby', branch: 'master'
 gem "aws-sdk-s3", require: false
 gem 'csv'
+gem 'rack-host-redirect'
