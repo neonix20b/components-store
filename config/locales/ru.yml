@@ -1,4 +1,8 @@
 ru:
+  spree:
+    internationalization: internationalization
+    nav_bar:
+      desktop: Desktop navigation
   activerecord:
     attributes:
       spree/address:
