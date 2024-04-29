@@ -1,8 +1,4 @@
 ru:
-  spree:
-    internationalization: internationalization
-    nav_bar:
-      desktop: Desktop navigation
   activerecord:
     attributes:
       spree/address:
@@ -479,7 +475,8 @@ ru:
     all_adjustments_closed: "Все корректировки успешно закрыты!"
     all_adjustments_opened: "Все корректировки успешно открыты!"
     all_departments: "Все разделы"
-    all_items_have_been_returned:
+    all_items_have_been_returned: Все элементы вернулись
+    all_rights_reserved: Все права защищены
     allow_ssl_in_development_and_test: "Разрешить SSL для development и test режимов"
     allow_ssl_in_production: "Разрешить SSL для production режима"
     allow_ssl_in_staging: "Разрешить SSL для staging режима"
@@ -767,6 +764,13 @@ ru:
     gateway_error: "Ошибка платежного шлюза"
     general: "Основные"
     general_settings: "Общие настройки"
+    generate_code: Генерировать купон
+    get_back_to_the: Назад к
+    go_to_category: К Категории
+    go_to_facebook: Go to facebook
+    go_to_homepage: На главную
+    go_to_instagram: Go to instagram
+    go_to_twitter: Go to twitter
     globalize:
       locales_displayed_on_translation_forms: "Локаль, отображаемая в формах перевода"
       store_translations: "Локализация настроек"
@@ -810,6 +814,7 @@ ru:
     intercept_email_address: "Перехват писем"
     intercept_email_instructions: "Заменить email получателя на этот адрес."
     internal_name: "Внутреннее имя"
+    internationalization: Интернационализация
     invalid_credit_card: "Не верно указана платежная карта"
     invalid_exchange_variant: ""
     invalid_payment_provider: "Неверно указан способ оплаты"
@@ -897,7 +902,11 @@ ru:
       my_orders: "Мои заказы"
       show_search: "Поиск"
       show_user_menu: "Меню"
+      show_menu: Показать Меню
       sign_up: "Регистрация"
+      desktop: Desktop навигация
+      mobile: Мобильная навигация
+      go_to_previous_menu: Предыдущее меню
     new: "Новый"
     new_adjustment: "Новая корректировка"
     new_country: "Новая страна"
