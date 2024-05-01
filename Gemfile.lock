@@ -7,8 +7,29 @@ GIT
       ffi (~> 1.9)
 
 GIT
+  remote: https://github.com/spree-contrib/spree_sitemap.git
+  revision: 20a0afb3ff6255fcdd7ea8fa7e8a5ee6f9fc6398
+  specs:
+    spree_sitemap (3.3.1)
+      sitemap_generator
+      spree_core (>= 3.1.0, < 5.0)
+      spree_extension
+
+GIT
+  remote: https://github.com/spree/deface.git
+  revision: 6bf18df76715ee3eb3d0cd1b6eda822817ace91c
+  branch: master
+  specs:
+    deface (1.9.0)
+      actionview (>= 5.2)
+      nokogiri (>= 1.6)
+      polyglot
+      railties (>= 5.2)
+      rainbow (>= 2.1.0)
+
+GIT
   remote: https://github.com/spree/spree.git
-  revision: 535ef7320900ab00afe2a2f48c42680922e49683
+  revision: 8aeceef4470c20dc778482a13329e15f8ac2eb85
   branch: main
   specs:
     spree (4.8.0.beta)
@@ -101,7 +122,7 @@ GIT
 
 GIT
   remote: https://github.com/spree/spree_rails_frontend.git
-  revision: 6f6a77e66d1d51fa568e02cce968fd307ffed21a
+  revision: 96857bb4b605b143f3e59fa3ac37430c1104f1f2
   branch: main
   specs:
     spree_frontend (4.7.0)
@@ -115,8 +136,8 @@ GIT
       jquery-rails (~> 4.3)
       responders
       sass-rails (>= 5)
-      spree_api (>= 4.7.0)
-      spree_core (>= 4.7.0)
+      spree_api (~> 4.7)
+      spree_core (~> 4.7)
       sprockets (~> 4.0)
       stimulus-rails
       turbo-rails
@@ -223,7 +244,7 @@ GEM
       activerecord (>= 4.0.0, < 7.2)
     aws-eventstream (1.3.0)
     aws-partitions (1.922.0)
-    aws-sdk-core (3.193.0)
+    aws-sdk-core (3.194.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.8)
@@ -231,8 +252,8 @@ GEM
     aws-sdk-kms (1.80.0)
       aws-sdk-core (~> 3, >= 3.193.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.148.0)
-      aws-sdk-core (~> 3, >= 3.193.0)
+    aws-sdk-s3 (1.149.0)
+      aws-sdk-core (~> 3, >= 3.194.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.8)
     aws-sigv4 (1.8.0)
@@ -431,6 +452,7 @@ GEM
     paranoia (2.6.3)
       activerecord (>= 5.1, < 7.2)
     pg (1.5.6)
+    polyglot (0.3.5)
     popper_js (1.16.1)
     pragmatic_segmenter (0.3.23)
       unicode
@@ -483,6 +505,7 @@ GEM
       rake (>= 12.2)
       thor (~> 1.0, >= 1.2.2)
       zeitwerk (~> 2.6)
+    rainbow (3.1.1)
     rake (13.2.1)
     ransack (4.1.1)
       activerecord (>= 6.1.5)
@@ -507,7 +530,7 @@ GEM
       actionpack (>= 5.2)
       railties (>= 5.2)
     rexml (3.2.6)
-    ruby-openai (7.0.0)
+    ruby-openai (7.0.1)
       event_stream_parser (>= 0.3.0, < 2.0.0)
       faraday (>= 1)
       faraday-multipart (>= 1)
@@ -529,6 +552,8 @@ GEM
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
     simple_po_parser (1.1.6)
+    sitemap_generator (6.3.0)
+      builder (~> 3.0)
     smarter_csv (1.10.3)
     solid_cache (0.6.0)
       activejob (>= 7)
@@ -543,8 +568,8 @@ GEM
     spree_extension (0.1.0)
       activerecord (>= 4.2)
       spree_core
-    spree_gateway (3.10.0)
-      spree_core (>= 3.7.0)
+    spree_gateway (3.11.0)
+      spree_core (>= 3.7)
       spree_extension
     spree_i18n (5.3.0)
       i18n_data
@@ -623,6 +648,7 @@ DEPENDENCIES
   capybara
   csv
   debug
+  deface!
   image_processing (~> 1.2)
   importmap-rails
   jbuilder
@@ -649,6 +675,7 @@ DEPENDENCIES
   spree_gateway
   spree_i18n
   spree_sample!
+  spree_sitemap!
   sprockets-rails
   stimulus-rails
   turbo-rails
