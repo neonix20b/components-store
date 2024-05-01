@@ -5,4 +5,4 @@ set -o errexit
 bundle install
 bundle exec rails assets:precompile
 bundle exec rails assets:clean
-bundle exec rake sitemap:refresh
+bundle exec rake sitemap:refresh:no_ping

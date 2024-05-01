@@ -61,9 +61,9 @@ group :development do
   # gem "spring"
   gem 'smarter_csv'
   # gem 'kramdown'
-  gem 'redcarpet'
   gem 'langchainrb'
   gem "ruby-openai"
+  gem 'redcarpet'
 end
 
 group :test do
@@ -97,3 +97,4 @@ gem 'sassc', github: 'sass/sassc-ruby', branch: 'master'
 gem "aws-sdk-s3", require: false
 gem 'csv'
 gem 'rack-host-redirect'
+gem 'httparty'
