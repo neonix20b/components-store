@@ -2,7 +2,8 @@ class YandexMarketFeed
 	include Rails.application.routes.url_helpers
 
 	def self.generate
-		puts "start Yandex Market Feed"
+		puts "Generate Market Feed"
+		I18n.locale = :ru
 		store = Spree::Store.default
 		xml = Nokogiri::XML::Builder.new(encoding: 'UTF-8') { |xml| 
 		    xml.yml_catalog(date: Time.now.strftime('%FT%H:%M')) do
