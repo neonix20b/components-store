@@ -78,7 +78,7 @@ Rails.application.configure do
     api_key: ENV["MAILGUN_KEY"],
     domain: 'smart-components.pro',
     api_host: 'api.eu.mailgun.net'  # Uncomment this line for EU region domains
-    # timeout: 20 # Default depends on rest-client, whose default is 60s. Added in 1.2.3.
+    timeout: 60 # Default depends on rest-client, whose default is 60s. Added in 1.2.3.
   }
 
   # Ignore bad email addresses and do not raise email delivery errors.
