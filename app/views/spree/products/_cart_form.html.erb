@@ -43,6 +43,8 @@
         <%= render 'cart_form_availability_templates', type: 'not-available-in-currency' %>
       <% elsif default_variant.in_stock? %>
         <%= render 'cart_form_availability_templates', type: 'in-stock' %>
+        <div style="font-size:0.75rem">Точный срок поставки будет указан после размещения заказа</div>
+        <p></p>
       <% elsif default_variant.backorderable? %>
         <%= render 'cart_form_availability_templates', type: 'backorderable' %>
       <% else %>
