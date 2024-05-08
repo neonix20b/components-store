@@ -305,6 +305,7 @@ GEM
       warden (~> 1.2.3)
     devise-encryptable (0.2.0)
       devise (>= 2.1.0)
+    domain_name (0.6.20240107)
     doorkeeper (5.7.0)
       railties (>= 5)
     drb (2.2.1)
@@ -337,6 +338,9 @@ GEM
     glyphicons (1.0.2)
     hashie (5.0.0)
     highline (3.0.1)
+    http-accept (1.7.0)
+    http-cookie (1.0.5)
+      domain_name (~> 0.5)
     httparty (0.22.0)
       csv
       mini_mime (>= 1.0.0)
@@ -406,8 +410,13 @@ GEM
       net-imap
       net-pop
       net-smtp
+    mailgun-ruby (1.2.14)
+      rest-client (>= 2.0.2)
     marcel (1.0.4)
     matrix (0.4.2)
+    mime-types (3.5.2)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2024.0507)
     mini_magick (4.12.0)
     mini_mime (1.1.5)
     minitest (5.22.3)
@@ -442,6 +451,7 @@ GEM
       timeout
     net-smtp (0.5.0)
       net-protocol
+    netrc (0.11.0)
     nio4r (2.7.3)
     nokogiri (1.16.4-aarch64-linux)
       racc (~> 1.4)
@@ -537,6 +547,11 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
+    rest-client (2.1.0)
+      http-accept (>= 1.7.0, < 2.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     rexml (3.2.6)
     ruby-openai (7.0.1)
       event_stream_parser (>= 0.3.0, < 2.0.0)
@@ -663,6 +678,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   langchainrb
+  mailgun-ruby
   mini_magick
   mission_control-jobs
   parallel
