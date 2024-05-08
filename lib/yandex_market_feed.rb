@@ -2,7 +2,7 @@ class YandexMarketFeed
 	include Rails.application.routes.url_helpers
 
 	def self.generate
-		puts "start yml #{Time.now}"
+		puts "start Yandex Market Feed"
 		store = Spree::Store.default
 		xml = Nokogiri::XML::Builder.new(encoding: 'UTF-8') { |xml| 
 		    xml.yml_catalog(date: Time.now.strftime('%FT%H:%M')) do
@@ -48,8 +48,7 @@ class YandexMarketFeed
 		#puts xml
 		#File.write("public/market_feed.yml", xml)
 		Zlib::GzipWriter.open('public/market_feed.yml.gz') do |gz|
-		  gz.write xml.to_xml
+		  gz.write xml
 		end
-		puts "end yml #{Time.now}"
 	end
 end
