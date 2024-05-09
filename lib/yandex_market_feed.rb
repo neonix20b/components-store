@@ -20,9 +20,10 @@ class YandexMarketFeed
 		            xml.offers do
 		            	Spree::Product.all.available.not_discontinued.distinct.order(:id).includes(
 		            		:taxons, 
+		            		:translations,
 		            		master: [:prices, 
             						{ images: { attachment_attachment: :blob } }]
-            						).includes(:translations).each do |product|
+            						).each do |product|
 		            		next if product.master_images.blank?
 		            		xml.offer(id: product.id) do
 		            			xml.name product.name
