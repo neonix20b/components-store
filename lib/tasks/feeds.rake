@@ -1,5 +1,6 @@
 desc "Print reminder about eating more fruit."
 
-task yandex: :environment do
+task feeds: :environment do
   YandexMarketFeed.generate
+  GoogleMerchantFeed.generate
 end

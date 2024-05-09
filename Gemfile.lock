@@ -16,18 +16,6 @@ GIT
       spree_extension
 
 GIT
-  remote: https://github.com/spree/deface.git
-  revision: 6bf18df76715ee3eb3d0cd1b6eda822817ace91c
-  branch: master
-  specs:
-    deface (1.9.0)
-      actionview (>= 5.2)
-      nokogiri (>= 1.6)
-      polyglot
-      railties (>= 5.2)
-      rainbow (>= 2.1.0)
-
-GIT
   remote: https://github.com/spree/spree.git
   revision: cf9235bdefbea4b7c996d449920966c6b8075131
   branch: main
@@ -83,17 +71,6 @@ GIT
     spree_sample (4.8.0.beta)
       ffaker (~> 2.9)
       spree_core (>= 4.8.0.beta)
-
-GIT
-  remote: https://github.com/spree/spree_auth_devise.git
-  revision: 167f2892a0b57aaafccc931ba31d55735bd7e0e9
-  branch: main
-  specs:
-    spree_auth_devise (4.6.2)
-      devise (~> 4.7)
-      devise-encryptable (= 0.2.0)
-      spree_core (>= 4.5.0)
-      spree_extension
 
 GIT
   remote: https://github.com/spree/spree_backend.git
@@ -442,7 +419,7 @@ GEM
     mutex_m (0.2.0)
     net-http (0.4.1)
       uri
-    net-imap (0.4.10)
+    net-imap (0.4.11)
       date
       net-protocol
     net-pop (0.1.2)
@@ -470,7 +447,6 @@ GEM
     paranoia (2.6.3)
       activerecord (>= 5.1, < 7.2)
     pg (1.5.6)
-    polyglot (0.3.5)
     popper_js (1.16.1)
     pragmatic_segmenter (0.3.23)
       unicode
@@ -523,7 +499,6 @@ GEM
       rake (>= 12.2)
       thor (~> 1.0, >= 1.2.2)
       zeitwerk (~> 2.6)
-    rainbow (3.1.1)
     rake (13.2.1)
     ransack (4.1.1)
       activerecord (>= 6.1.5)
@@ -588,6 +563,11 @@ GEM
       concurrent-ruby (~> 1.2.2)
       fugit (~> 1.9.0)
       railties (>= 7.1)
+    spree_auth_devise (4.6.2)
+      devise (~> 4.7)
+      devise-encryptable (= 0.2.0)
+      spree_core (>= 4.5.0)
+      spree_extension
     spree_extension (0.1.0)
       activerecord (>= 4.2)
       spree_core
@@ -671,7 +651,6 @@ DEPENDENCIES
   capybara
   csv
   debug
-  deface!
   hashie
   httparty
   image_processing (~> 1.2)
@@ -695,7 +674,7 @@ DEPENDENCIES
   solid_cache
   solid_queue
   spree!
-  spree_auth_devise!
+  spree_auth_devise
   spree_backend!
   spree_emails!
   spree_frontend!
