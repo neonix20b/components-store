@@ -1,7 +1,7 @@
 class YandexTurbo
   #prepend Spree::ServiceModule::Base
 
-  def self.generate(page: 0, items_per_page: 500)
+  def self.generate(page: 0, items_per_page: 1000)
     puts "Yandex Turbo"
     I18n.locale = :ru
     store = Spree::Store.default

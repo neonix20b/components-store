@@ -552,7 +552,6 @@ GEM
     simple_po_parser (1.1.6)
     sitemap_generator (6.3.0)
       builder (~> 3.0)
-    smarter_csv (1.10.3)
     solid_cache (0.6.0)
       activejob (>= 7)
       activerecord (>= 7)
@@ -670,7 +669,6 @@ DEPENDENCIES
   ruby-openai
   sassc!
   selenium-webdriver
-  smarter_csv
   solid_cache
   solid_queue
   spree!

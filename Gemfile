@@ -59,13 +59,11 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
-  gem 'smarter_csv'
+  # gem 'smarter_csv'
   # gem 'kramdown'
   gem 'langchainrb'
   gem "ruby-openai"
   gem 'redcarpet'
-  gem 'parallel'
-  gem 'hashie'
 end
 
 group :test do
@@ -101,3 +99,5 @@ gem 'csv'
 gem 'rack-host-redirect'
 gem 'httparty'
 gem 'mailgun-ruby'
+gem 'parallel'
+gem 'hashie'
