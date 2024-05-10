@@ -1,7 +1,7 @@
 class YandexTurbo
   #prepend Spree::ServiceModule::Base
 
-  def self.generate()
+  def self.generate(page: 0, items_per_page: 500)
     puts "Yandex Turbo"
     I18n.locale = :ru
     store = Spree::Store.default
@@ -20,7 +20,7 @@ class YandexTurbo
                     :translations,
                     master: [:prices, 
                         { images: { attachment_attachment: :blob } }]
-                        )
+                        ).limit(items_per_page).offset(page*items_per_page)
             products.each do |product|
               next if product.master_images.blank?
                 xml.item(turbo: "true") do
@@ -53,6 +53,8 @@ class YandexTurbo
     upload_address = request("/user/#{user_id}/hosts/#{host_id}/turbo/uploadAddress?mode=PRODUCTION")["upload_address"].delete_prefix("https://api.webmaster.yandex.net/v4")
     task_id = request(upload_address, data: xml.to_xml)["task_id"]
     #request("/user/#{user_id}/hosts/#{host_id}/turbo/tasks/#{task_id}")
+    puts task_id
+    task_id
   end
 
   def self.request url, data: nil
