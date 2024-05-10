@@ -26,7 +26,7 @@ class GoogleMerchantFeed
                   xml['g'].send("link", Spree::Core::Engine.routes.url_helpers.product_url(product, host: store.url, protocol: "https"))
                   xml['g'].send("image_link", "https://s3.eu-central-1.amazonaws.com/s3-components.oxteam.me/#{product.master_images.first.attachment_attachment.blob.key}")
                   xml['g'].send("availability", "in_stock")
-                  xml['g'].send("availability_date", Time.now.strftime('%FT%H:%MZ'))
+                  xml['g'].send("availability_date", product.available_on.strftime('%FT%H:%MZ'))
                   xml['g'].send("price", "#{product.master.price.to_i} RUB")
                   xml['g'].send("brand", product.taxons.map{|t| t.meta_title}.join(", "))
                   xml['g'].send("condition", "new")
