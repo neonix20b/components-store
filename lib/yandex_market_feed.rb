@@ -3,7 +3,7 @@ class YandexMarketFeed
 
 	def self.generate
 		puts "Generate Market Feed"
-		return nil if File.exist?("public/market_feed.yml.gz")
+		# return nil if File.exist?("public/market_feed.yml.gz")
 		I18n.locale = :ru
 		store = Spree::Store.default
 		xml = Nokogiri::XML::Builder.new(encoding: 'UTF-8') { |xml| 

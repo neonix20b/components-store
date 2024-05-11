@@ -378,9 +378,9 @@ ru:
         one: Разрешение на возврат
         other: Разрешения на возврат
       spree/return_authorization_reason:
-        many: Причин разрешения на возврат
-        one: Причина разрешения на возврат
-        other: Причины разрешения на возврат
+        many: Причин на возврат
+        one: Причина на возврат
+        other: Причины на возврат
       spree/role:
         many: Ролей
         one: Роль
@@ -557,7 +557,7 @@ ru:
     add_stock: Добавить склад
     add_stock_management: Добавить управление запасами
     add_store: Новый магазин
-    add_store_credit: Добавить кредит магазину
+    add_store_credit: Добавить кредит магазина
     add_to_cart: Добавить в корзину
     add_variant: Добавить вариант
     added_to_cart: Добавлено в корзину!
@@ -665,8 +665,8 @@ ru:
         you_have_no_pages: У вас нет страниц, нажмите кнопку <b>+ Добавить новую страницу</b>, чтобы начать.
       created_at: Создано
       data_feeds:
-        data_feeds: Данные Записей
-        new_data_feed: Новая Запись Данных
+        data_feeds: Потоки данных
+        new_data_feed: Новый Поток Данных
         slug_label: Слаг (оставьте пустым, чтобы сгенерировать)
         type: Тип
       digitals:
@@ -773,7 +773,7 @@ ru:
       product:
         active: Активные
         all: Все
-        archived: Архивированные
+        archived: Архивные
         draft: Черновики
       product_kinds:
         physical: Физический
@@ -1504,7 +1504,7 @@ ru:
     new_refund_reason: Новая причина возврата
     new_reimbursement_type: Новый тип возмещения
     new_return_authorization: Новое разрешение на возврат
-    new_rma_reason: Новая причина разрешения на возврат
+    new_rma_reason: Новая причина на возврат
     new_role: Новая роль
     new_shipment_at_location: Новый заказ из склада
     new_shipping_category: Новая категория доставки
@@ -2112,7 +2112,7 @@ ru:
     stock_transfer_name: Передача запасов
     stock_transfers: Движения товаров
     stop: Конец
-    store: В магазин
+    store: Магазин
     store_credit:
       additional_payment_needed: Выберите другой способ оплаты для остатка <strong>%{amount}</strong>.
       allocated: Добавлен
@@ -2318,4 +2318,4 @@ ru:
     zones: Торговые зоны
   views:
     pagination:
-      truncate: Truncate
+      truncate: "…"

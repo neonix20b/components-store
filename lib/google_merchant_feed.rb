@@ -3,7 +3,7 @@ class GoogleMerchantFeed
 
   def self.generate()
     puts "Generate Merchant Feed"
-    return nil if File.exist?("public/merchant_feed.xml.gz")
+    # return nil if File.exist?("public/merchant_feed.xml.gz")
     I18n.locale = :ru
     store = Spree::Store.default
     xml = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
