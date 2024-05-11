@@ -64,6 +64,7 @@ group :development do
   gem 'langchainrb'
   gem "ruby-openai"
   gem 'redcarpet'
+  gem 'i18n-tasks'
 end
 
 group :test do

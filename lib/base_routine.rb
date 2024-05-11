@@ -1,7 +1,7 @@
 class BaseRoutine
 	# t = Spree::Taxon.find(34)
 	MIN_PRICE = 300
-	KEYWORDS = ["eval", "boards", "board", "kit", "kits", "FPGA", "PGA", "DAC", "ADC", "chip", "MCU", "PLD", "LDO", "DSP", "CMOS", "COB", "CPLD", "driver", "SoC", "Amplifier", "Logic", "PLL", "IC", "sensor", "PMIC", "Linear", "Interface", "Embedded", "Memory"]
+	KEYWORDS = ["eval", "board", "kit", "FPGA", "PGA", "DAC", "ADC", "MCU", "PLD", "LDO", "DSP", "CMOS", "COB", "CPLD", "driver", "SoC", "Amplifier", "Logic", "PLL", "IC", "sensor", "PMIC", "Linear", "Interface", "Embedded", "Memory"]
 	
 	def self.loadProductsFor taxon: nil, keywords: KEYWORDS, in_threads: 1
 		keywords = taxon.meta_keywords.split(",").map{|i|i.chomp} if keywords.nil?
@@ -12,6 +12,8 @@ class BaseRoutine
 		return nil if mfr_ids.blank?
 		digikey = Digikey.new
 		digikey.getAccessToken()
+		SpreeStarter::Application.config.i18n.default_locale = :ru
+		I18n.locale = :ru
 
 		parallelBlock(keywords, in_threads: in_threads) do |keyword|
 		#keywords.each do |keyword|

@@ -1,7 +1,7 @@
 databases:
   - name: components-database-2024
     region: frankfurt
-    plan: starter
+    plan: standard
     ipAllowList: [] # only allow internal connections
 
 services:
@@ -28,7 +28,7 @@ services:
     name: components-web
     region: frankfurt
     runtime: ruby
-    plan: starter
+    plan: standard
     buildCommand: "./bin/render-build.sh"
     preDeployCommand: "bundle exec rails db:migrate"
     startCommand: "bundle exec rails server"

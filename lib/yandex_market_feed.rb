@@ -34,7 +34,7 @@ class YandexMarketFeed
 		            			xml.price product.master.price.to_i
 		            			xml.currencyId "RUR"
 		            			xml.categoryId product.taxons.first.id
-		            			xml.picture "https://s3.eu-central-1.amazonaws.com/s3-components.oxteam.me/#{product.master_images.first.attachment_attachment.blob.key}"
+		            			xml.picture "https://cdn.#{store.url}/#{product.master_images.first.attachment_attachment.blob.key}"
 		            			xml.description do
 		            				xml.cdata product.meta_description
 		            			end

@@ -34,7 +34,7 @@ class YandexTurbo
                     xml.cdata "<header>
                                   <h1>#{product.name} от #{product.taxons.map{|t| t.meta_title}.join(", ")}</h1>
                                   <figure>
-                                      <img src='https://s3.eu-central-1.amazonaws.com/s3-components.oxteam.me/#{product.master_images.first.attachment_attachment.blob.key}'/>
+                                      <img src='https://cdn.#{store.url}/#{product.master_images.first.attachment_attachment.blob.key}'/>
                                   </figure>
                                   <h2>#{product.meta_description}</h2>
                                   <menu>
