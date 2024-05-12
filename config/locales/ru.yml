@@ -323,9 +323,9 @@ ru:
         one: Кредитная карта
         other: Кредитные карты
       spree/customer_return:
-        many: Возвратов покупателю
-        one: Возврат покупателю
-        other: Возвраты покупателю
+        many: Возвратов покупателям
+        one: Возврат покупателям
+        other: Возвраты покупателям
       spree/inventory_unit:
         many: Единиц
         one: Единица
@@ -1245,7 +1245,7 @@ ru:
     customer_details: Реквизиты клиента
     customer_details_updated: Данные клиента были обновлены.
     customer_return: Возврат покупателю
-    customer_returns: Возвраты покупателю
+    customer_returns: Возвраты покупателям
     customer_search: Поиск клиента
     customer_support_email: Электронная почта службы поддержки клиентов
     cut: Вырезать
