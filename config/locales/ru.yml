@@ -726,7 +726,7 @@ ru:
         menu_items: Пункты Меню '%{menu_name}'
         menus: Меню
         move_could_not_be_saved: 'ОШИБКА: Это перемещение не может быть сохранено.'
-        nested_under: Вложено под
+        nested_under: Вложено в
         nested_under_info: Быстро вложите свой Пункт Меню, если вы уже знаете, где
           он должен быть.
         new_menu: Новое Меню

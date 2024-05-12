@@ -34,6 +34,7 @@ class Digikey
 	end
 
 	def searchProducts keyword: "", mfr_ids: [], offset: 0, &block
+		return nil unless File.exist?(CACHE_DIR)
 		cache = "#{CACHE_DIR}/#{keyword}_#{mfr_ids.join("-")}_#{offset}.json"
 		resp = nil
 		unless File.exist?(cache)
