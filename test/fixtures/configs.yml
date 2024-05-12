@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  configurable: one
+  configurable_type: Configurable
+  name: MyString
+  payload: 
+
+two:
+  configurable: two
+  configurable_type: Configurable
+  name: MyString
+  payload: 

@@ -1,14 +1,11 @@
 class Digikey
 	@@access_token = nil
-	@@expores_in = nil
-	@@refresh_token = nil
+	@@expires_in = nil
 	@@semaphore = nil
 
-	RATE_FILE = "tmp/digikey_rate_limit"
-	TOKEN_FILE = "tmp/refresh_token"
 	CACHE_DIR = "tmp/search/digikey"
 
-	def dataFor part_number: "123987-HMC736LP4"
+	def dataFor part_number: ""
 		resp = HTTParty.post("https://api.digikey.com/products/v4/search/keyword",
 			headers: accessHeaders, 
 			body: {"Keywords" => part_number, "Limit" => 1, "Offset" => 0}.to_json
@@ -73,27 +70,27 @@ class Digikey
 
 	def getAccessToken
 		sleep(10) unless @@semaphore.nil?
-		if File.exist?(RATE_FILE)
-			rate_test = File.read(RATE_FILE).to_i
-			rateLimit({}, time: Time.at(rate_test)) if rate_test - Time.now.to_i > 0
-		end
-		@@refresh_token = File.read(TOKEN_FILE)
+		rate_test = config.payload["rate_limit"].to_i
+		rateLimit({}, time: Time.at(rate_test)) if rate_test - Time.now.to_i > 0
+		
+		refresh_token = config.payload["refresh_token"] 
 		#puts("https://api.digikey.com/v1/oauth2/authorize?response_type=code&client_id=#{ENV["DIGIKEY_ID"]}&redirect_uri=#{CGI.escape "https://127.0.0.1:8443/digikey/"}")
 		# resp = HTTParty.post("https://api.digikey.com/v1/oauth2/token", body: {code: code, client_id: ENV["DIGIKEY_ID"], client_secret: ENV["DIGIKEY_SECRET"], grant_type: "authorization_code", redirect_uri: "https://127.0.0.1:8443/digikey/"})
-		if @@access_token.nil? or (@@expores_in.to_i - Time.now.to_i < 0)
+		if @@access_token.nil? or (@@expires_in.to_i - Time.now.to_i < 0)
 			@@semaphore = Time.now
 			resp = HTTParty.post("https://api.digikey.com/v1/oauth2/token", 
 				body: {
 					client_id: ENV["DIGIKEY_ID"], 
 					client_secret: ENV["DIGIKEY_SECRET"], 
 					grant_type: "refresh_token", 
-					refresh_token: @@refresh_token
+					refresh_token: refresh_token
 				})
 			puts resp
-			@@expores_in = Time.now + resp["expires_in"].seconds - 60.seconds
+			@@expires_in = Time.now + resp["expires_in"].seconds - 60.seconds
 			@@access_token = resp["access_token"]
-			@@refresh_token = resp["refresh_token"]
-			File.write(TOKEN_FILE, resp["refresh_token"])
+			refresh_token = resp["refresh_token"]
+			config.payload["refresh_token"] = refresh_token
+			config.save!
 			@@semaphore = nil
 		end
 		return @@access_token
@@ -123,13 +120,18 @@ class Digikey
 			}
 	end
 
+	def config
+		@config ||= Spree::Store.default.configs.find_by(name: "digikey")
+	end
+
 	def rateLimit resp, time: nil
 		t = time
 		delta = 0
 		if time.nil?
 			t = Time.now + resp.headers["retry-after"].to_i
 			delta = resp.headers["retry-after"]
-			File.write(RATE_FILE, t.to_i)
+			config.payload["rate_limit"] = t.to_i
+			config.save!
 		end
 		raise "[#{delta}] Digikey: Daily Ratelimit exceeded (#{t})"
 	end

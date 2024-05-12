@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_03_203734) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_12_082728) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -59,6 +59,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_03_203734) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "configs", force: :cascade do |t|
+    t.string "configurable_type", null: false
+    t.bigint "configurable_id", null: false
+    t.string "name"
+    t.jsonb "payload", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["configurable_type", "configurable_id"], name: "index_configs_on_configurable"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|

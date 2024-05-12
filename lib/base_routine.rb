@@ -12,7 +12,6 @@ class BaseRoutine
 		return nil if mfr_ids.blank?
 		digikey = Digikey.new
 		digikey.getAccessToken()
-		SpreeStarter::Application.config.i18n.default_locale = :ru
 		I18n.locale = :ru
 
 		parallelBlock(keywords, in_threads: in_threads) do |keyword|
@@ -213,14 +212,10 @@ class BaseRoutine
 		puts "[#{product.id}] #{product.name} (ai)"
 
 		I18n.locale = :ru
-		role = "Твоя роль - эксперт по электрическим схемам, специализирующийся на создании и анализе электрических схем, предоставлении рекомендаций по схемам и использованию компонентов. Поделись лучшими практиками и советами по проектированию и анализу электрических схем, а также по их оптимизации. От тебя требуется: Знание основ электроники и электротехники, включая анализ схем и симуляцию, Умение четко и понятно формулировать технические рекомендации и обучающие материалы."
-		materials = "Мы делаем интернет-магазин электронных компонентов. Пользователь будет давать тебе название компонента (Manufacturer Part Number) и название производителя, ты в ответ должен давать описание для сайта: общее описание, преимущества, недостатки, типовое использование, рекомендации по применению, основные технические характеристики, возможные аналоги и тому подобное. Для наглядности используй Markdown."
+		@config ||= Spree::Store.default.configs.find_by(name: "ai").payload
 		vendors = product.taxons.pluck(:name)
 		ai = [product.property("ai"),product.property("ai2")].compact.join("\n")
-		sys_messages = [
-			{role: "system", content: role},
-			{role: "system", content: materials}
-		]
+		sys_messages = @config["sys_messages"]
 		sys_messages.append({role: "assistant", content: ai}) unless ai.blank?
 		parameters = []
 		parameters = [{role: "assistant", content: product.property("parameters2")}] unless product.property("parameters2").nil?
@@ -247,7 +242,7 @@ class BaseRoutine
 			File.write("tmp/ai/#{product.id}.md", description)
 		end
 		meta_messages = [
-			{role: "user", content: "Напиши текст для мета-тега description (до 160 букв)"}
+			{role: "user", content: @config["description"]}
 		]
 		#puts "make meta description #{product.name}"
 		meta_description = ""
@@ -259,7 +254,7 @@ class BaseRoutine
 		end
 		meta_messages = [
 			{role: "assistant", content: meta_description },
-			{role: "user", content: "Напиши ключевые слова на русском языке для мета-тега keywords (до 160 букв)"}
+			{role: "user", content: @config["keywords"]}
 		]
 		meta_keywords = ""
 		if File.exist?("tmp/ai/#{product.id}_keywords.md")

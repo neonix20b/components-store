@@ -1,34 +1,5 @@
 class Mouser
-	HEAERS = { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
-
-	# def loadFolder path: "tmp/mouser"
-	# 	# ActiveRecord::Base.logger.level = 1
-	# 	#executor = Concurrent::ThreadPoolExecutor.new(max_threads: 10)
-	# 	Dir["#{path}/*.csv"].map do |file|
-	# 		#executor.post{ loadFile(file) }
-	# 		loadFile(file)
-	# 	end
-	# 	#executor.shutdown
-	# end
-	
-	# def loadFile path
-	# 	I18n.locale = :ru
-	# 	csv = SmarterCSV.process(path)
-	# 	arr = []
-	# 	csv.each do |item|
-	# 		# findOrCreateProduct part_number: item[:mfr_part_number], availability: item[:availability], price: item[:pricing], product_number: item[:mouser_part_number], source: "mouser"
-	# 		puts item[:mfr_part_number]
-	# 		product = Spree::Product.find_by(meta_title: item[:mfr_part_number])
-	# 		unless product.nil?
-	# 			product.set_property("mouser", item[:mouser_part_number])
-	# 			#product.product_properties.each {|prop| prop.show_property=false;prop.save!}
-	# 		else
-	# 			arr += [item[:mfr_part_number]]
-	# 		end
-	# 	end
-	# 	puts arr
-	# 	arr
-	# end
+	HEADERS = { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
 
 	def self.dataFor mouserPartNumber: ""
 		url = "https://api.mouser.com/api/v1/search/partnumber?apiKey=#{ENV["MOUSER_KEY"]}"
@@ -38,7 +9,7 @@ class Mouser
 							    			"partSearchOptions" => "Exact"
 									    	}
 		             			}.to_json,
-		    			headers: HEAERS )
+		    			headers: HEADERS )
 		result = result.dig("SearchResults", "Parts", 0)
 		unless result.nil?
 			hashFromResult(result)
@@ -57,7 +28,7 @@ class Mouser
 										    "pageNumber" => 0
 									    	}
 		             			}.to_json,
-		    			headers: HEAERS )
+		    			headers: HEADERS )
 		# puts result
 		hashFromResult(result["SearchResults"]["Parts"].first)
 	end
@@ -73,7 +44,7 @@ class Mouser
 										    "searchOptions" => "InStock"
 									    	}
 		             			}.to_json,
-		    			headers: HEAERS )
+		    			headers: HEADERS )
 		result["SearchResults"]["Parts"].each do |result|
 			yield hashFromResult(h)
 		end
