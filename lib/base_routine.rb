@@ -1,7 +1,7 @@
 class BaseRoutine
 	# t = Spree::Taxon.find(34)
 	MIN_PRICE = 300
-	KEYWORDS = ["eval", "board", "kit", "FPGA", "PGA", "DAC", "ADC", "MCU", "PLD", "LDO", "DSP", "CMOS", "COB", "CPLD", "driver", "SoC", "Amplifier", "Logic", "PLL", "IC", "sensor", "PMIC", "Linear", "Interface", "Embedded", "Memory"]
+	KEYWORDS = ["eval", "board", "kit", "FPGA", "PGA", "DAC", "ADC", "MCU", "PLD", "LDO", "DSP", "CMOS", "COB", "CPLD", "driver", "SoC", "Amplifier", "Logic", "PLL", "IC", "sensor", "PMIC", "Linear", "Interface", "Embedded", "Memory", "MOSFET", "RF"]
 	
 	def self.loadProductsFor taxon: nil, keywords: KEYWORDS, in_threads: 1
 		keywords = taxon.meta_keywords.split(",").map{|i|i.chomp} if keywords.nil?

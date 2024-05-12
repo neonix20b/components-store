@@ -111,14 +111,24 @@ class Digikey
 
 		h = {
 				description2: description.join("\n"),
-				datasheet2: result["DatasheetUrl"],
+				datasheet2: fixUrl(result["DatasheetUrl"]),
 				parameters2: parameters.join("\n"),
-				image: (result["PhotoUrl"]||"").gsub("^","%5E").gsub(" ", "%20"),
+				image: fixUrl(result["PhotoUrl"]),
 				price: result["UnitPrice"],
 				digikey: result.deep_find("DigiKeyProductNumber"),
 				qty: result["QuantityAvailable"],
 				part_number: result["ManufacturerProductNumber"]
 			}
+	end
+
+	def fixUrl url
+		return nil if url.blank?
+		url = url.gsub("^","%5E").gsub(" ", "%20")
+		if url.start_with?("//")
+			"https:#{url}"
+		else
+			url
+		end
 	end
 
 	def config
