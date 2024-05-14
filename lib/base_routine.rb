@@ -14,12 +14,12 @@ class BaseRoutine
 		digikey.getAccessToken()
 		I18n.locale = :ru
 
-		parallelBlock(keywords, in_threads: in_threads) do |keyword|
-		#keywords.each do |keyword|
+		#parallelBlock(keywords, in_threads: in_threads) do |keyword|
+		keywords.each do |keyword|
 			#ActiveRecord::Base.connection_pool.with_connection do
 				puts "Keyword: #{keyword}"
 				last_price = MIN_PRICE
-				(0..10).each do |page|
+				(0..30).each do |page|
 					next if last_price < MIN_PRICE
 					digikey.searchProducts keyword: keyword, mfr_ids: mfr_ids, offset: page*50 do |h|
 						if !h[:price].blank?
