@@ -62,7 +62,6 @@ group :development do
   # gem 'smarter_csv'
   # gem 'kramdown'
   gem 'langchainrb'
-  gem "ruby-openai"
   gem 'redcarpet'
   gem 'i18n-tasks'
 end
@@ -102,3 +101,4 @@ gem 'httparty'
 gem 'mailgun-ruby'
 gem 'parallel'
 gem 'hashie'
+gem "ruby-openai"
