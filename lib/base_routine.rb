@@ -98,7 +98,7 @@ class BaseRoutine
 
 			product.set_property(source, product_number)
 			return product
-		elsif product.sku.end_with?("-gen4")
+		elsif product.sku.include?("mouser")
 			return product
 		else
 			return nil
