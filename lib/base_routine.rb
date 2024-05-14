@@ -29,11 +29,15 @@ class BaseRoutine
 								puts "[#{keyword}/#{page}] #{part_number} $#{last_price}"
 								product = findOrCreateProduct part_number: part_number, availability: h[:qty], price: last_price, product_number: h[:digikey], source: "digikey"
 								unless product.nil?
-									product.description = "#{part_number} от #{taxon.name}"
-									product.save!
+									if product.description.blank?
+										product.description = "#{part_number} от #{taxon.name}"
+										product.save!
+									end
 
-									taxon.products << product
-									taxon.save!
+									if product.taxons.blank?
+										taxon.products << product
+										taxon.save!
+									end
 
 									updateProduct product, h: h
 
@@ -54,16 +58,18 @@ class BaseRoutine
 		end
 	end
 
-	# def mmm product
-	# 	return nil if !product.property("mouser").nil?
-	# 	taxon = product.taxons.first
-	# 	h2 = Mouser.searchDataFor part_number: product.name, mfr: taxon.meta_title
-	# 	BaseRoutine.updateProduct product, h: h2
-	# end
+	def mmm product
+		taxon = product.taxons.first
+		product.description = "#{product.name} от #{taxon.name}"
+		product.sku.delete_suffix!("-gen6")
+		product.sku.delete_suffix!("-gen5")
+		product.save!
+	end
 
 	def self.findOrCreateProduct part_number: "", availability: 0, price: 0.0, product_number: "", source: ""
 		return nil if price.nil?
-		if Spree::Product.find_by(meta_title: part_number).nil?
+		product = Spree::Product.find_by(meta_title: part_number)
+		if product.nil?
 			puts "make #{part_number}"
 			# price = price.gsub(/[="\.]/, "").tr(',', '.').to_f
 			return nil if price < 1
@@ -91,9 +97,8 @@ class BaseRoutine
 			stock.save!
 
 			product.set_property(source, product_number)
-
-			return product
 		end
+		return product
 	end
 
 	def self.findOrCreateTaxon(title)
@@ -218,10 +223,14 @@ class BaseRoutine
 		sys_messages = @config["sys_messages"]
 		sys_messages.append({role: "assistant", content: ai}) unless ai.blank?
 		parameters = []
-		parameters = [{role: "assistant", content: product.property("parameters2")}] unless product.property("parameters2").nil?
-		google = [
-			{role: "assistant", content: Google.askSearch(data:"\"#{product.name}\" from #{vendors.join(", ")} (specification||datasheet)").join("\n\n")}
-		]
+		google = []
+		if product.property("parameters2").nil?
+			google = [
+				{role: "assistant", content: Google.askSearch(data:"\"#{product.name}\" #{vendors.join(", ")} (specification||datasheet)").join("\n\n")}
+			]
+		else
+			parameters = [{role: "assistant", content: product.property("parameters2")}] 
+		end
 		user_messages = [
 			{role: "user", content: ActionView::Base.full_sanitizer.sanitize(product.description)}
 		]
@@ -233,7 +242,7 @@ class BaseRoutine
 		renderer = Redcarpet::Render::HTML.new(no_links: true)
 		markdown = Redcarpet::Markdown.new(renderer, autolink: false, tables: true, lax_spacing: true)
 		#puts "make description #{product.name}"
-		llm = Langchain::LLM::OpenAI.new(api_key: ENV["OPENAI"], default_options:{chat_completion_model_name: 'gpt-4-turbo'})
+		llm = Langchain::LLM::OpenAI.new(api_key: ENV["OPENAI"], default_options:{chat_completion_model_name: 'gpt-4o'})
 		description = ""
 		if File.exist?("tmp/ai/#{product.id}.md")
 			description = File.read("tmp/ai/#{product.id}.md")
@@ -241,35 +250,43 @@ class BaseRoutine
 			description = llm.chat(messages: sys_messages + parameters + google + user_messages).completion
 			File.write("tmp/ai/#{product.id}.md", description)
 		end
-		meta_messages = [
-			{role: "user", content: @config["description"]}
-		]
 		#puts "make meta description #{product.name}"
-		meta_description = ""
-		if File.exist?("tmp/ai/#{product.id}_meta.md")
-			meta_description = File.read("tmp/ai/#{product.id}_meta.md")
-		else
-			meta_description = llm.chat(messages: sys_messages + user_messages + meta_messages).completion
-			File.write("tmp/ai/#{product.id}_meta.md", meta_description)
-		end
-		meta_messages = [
-			{role: "assistant", content: meta_description },
-			{role: "user", content: @config["keywords"]}
-		]
-		meta_keywords = ""
-		if File.exist?("tmp/ai/#{product.id}_keywords.md")
-			meta_keywords = File.read("tmp/ai/#{product.id}_keywords.md")
-		else
-			meta_keywords = llm.chat(messages: sys_messages + user_messages + meta_messages).completion
-			File.write("tmp/ai/#{product.id}_keywords.md", meta_keywords)
-		end
-		# puts meta_keywords
+		#if product.meta_description.blank?
+			meta_messages = [
+				{role: "user", content: @config["description"]}
+			]
+			meta_description = ""
+			if File.exist?("tmp/ai/#{product.id}_meta.md")
+				meta_description = File.read("tmp/ai/#{product.id}_meta.md")
+			else
+				meta_description = llm.chat(messages: sys_messages + user_messages + meta_messages).completion
+				File.write("tmp/ai/#{product.id}_meta.md", meta_description)
+			end
+			product.meta_description = meta_description.remove("\"")
+		#end
+
+		#if product.meta_keywords.blank?
+			meta_messages = [
+				{role: "assistant", content: meta_description },
+				{role: "user", content: @config["keywords"]}
+			]
+			meta_keywords = ""
+			if File.exist?("tmp/ai/#{product.id}_keywords.md")
+				meta_keywords = File.read("tmp/ai/#{product.id}_keywords.md")
+			else
+				meta_keywords = llm.chat(messages: sys_messages + user_messages + meta_messages).completion
+				File.write("tmp/ai/#{product.id}_keywords.md", meta_keywords)
+			end
+			product.meta_keywords = meta_keywords.remove("\"")
+			product.meta_keywords.delete_prefix!("Купите ")
+		#end
+		llm = nil
+
 		product.description = markdown.render(description)
-		product.meta_description = meta_description.remove("\"")
-		product.meta_keywords = meta_keywords.remove("\"")
+		
 		product.save!
 		variant = product.master
-		variant.sku += "-gen6" unless variant.sku.ends_with?("gen6")
+		variant.sku += "-gen7" unless variant.sku.ends_with?("gen7")
 		variant.save!
 		product.activate!
 		File.delete("tmp/ai/#{product.id}.md")
@@ -278,6 +295,8 @@ class BaseRoutine
 	end
 
 	def self.updateAllDescriptions
+		# 13237ADC-BDM
+		# 119936-HMC686LP4
 		I18n.locale = :ru
 		prop = Spree::Property.find_by_presentation("ai2")
 		parallelBlock(prop.products.where(status: :draft).order(:id).includes(
@@ -287,7 +306,7 @@ class BaseRoutine
 		    #next if product.images.count == 0
 			variant = product.master
 			puts "#{product.name}"
-			if !variant.sku.ends_with?("gen6")# and product.images.count > 0
+			if !variant.sku.ends_with?("gen7")# and product.images.count > 0
 				# vendors = product.taxons.pluck(:name)
 				# variant.sku.delete_suffix!("-gen5")
 				# variant.sku.delete_suffix!("-gen4")
@@ -307,7 +326,117 @@ class BaseRoutine
 		end
 	end
 
-	def self.parallelBlock arr, in_threads: 10, &block
+	def self.updateDescriptionsAsync
+		@client ||= OpenAI::Client.new
+		ids = Spree::Variant.where("sku ILIKE '%-gen4'").pluck(:product_id)
+		products = Spree::Product.where(id: ids).includes(:translations, :taxons, properties: [:translations])
+		file_name = "tmp/batch_#{Time.now.to_i}.jsonl"
+		File.open(file_name, "w") do |f|
+		  products.each { |product| BaseRoutine.batchLinesFor(product).each{|item| f.puts(item.to_json)} }
+		end
+		response = @client.files.upload(parameters: { file: file_name, purpose: "batch"} )
+		file_id = response["id"]
+		# @client.files.list
+		# @client.files.delete(id: file_id)
+		response = @client.batches.create(
+		  parameters: {
+		    input_file_id: file_id,
+		    endpoint: "/v1/chat/completions",
+		    completion_window: "24h"
+		  }
+		)
+		#response
+		# batch_id = response["id"]
+		# batch = client.batches.retrieve(id: batch_id)
+		# output_file_id = batch["output_file_id"]
+		# output_response = client.files.content(id: output_file_id)
+		# error_file_id = batch["error_file_id"]
+		# error_response = client.files.content(id: error_file_id)
+		response["id"]
+	end
+
+	def self.batchLinesFor product
+		@config ||= Spree::Store.default.configs.find_by(name: "ai").payload
+		vendors = product.taxons.pluck(:name)
+		ai = [product.property("ai"),product.property("ai2")].compact.join("\n")
+		sys_messages = @config["sys_messages"]
+		#sys_messages.append({role: "assistant", content: ai}) unless ai.blank?
+		assistant_messages = []
+		parameters = []
+		google = []
+		assistant_messages = [{role: "assistant", content: ai}] unless ai.blank?
+		if product.property("parameters2").nil?
+			return []
+			google = [
+				{role: "assistant", content: Google.askSearch(data:"\"#{product.name}\" #{vendors.join(", ")} (specification||datasheet)").join("\n\n")}
+			]
+		else
+			parameters = [{role: "assistant", content: product.property("parameters2")}] 
+		end
+		product.description = "Напиши описание для #{product.meta_title} от #{vendors.join(", ")}"
+		user_messages = [ {role: "user", content: ActionView::Base.full_sanitizer.sanitize(product.description)} ]
+		meta_desc_messages = [ {role: "user", content: @config["description"]} ]
+		meta_keywords_messages = [ {role: "user", content: @config["keywords"]} ]
+		{"description": parameters + google + user_messages, 
+			"meta_description": user_messages + meta_desc_messages, 
+			"meta_keywords": user_messages + meta_keywords_messages}.map do |field, messages|
+			{
+				"custom_id": "#{product.class.to_s}-#{field}-#{product.id}", 
+				"method": "POST", 
+				"url": "/v1/chat/completions", 
+				"body": {
+					"model": "gpt-4o", 
+					"messages": sys_messages + assistant_messages + messages,
+					"max_tokens": 4096
+				}
+			}
+		end
+	end
+
+	def self.batchProcess id:
+		@client ||= OpenAI::Client.new
+		@markdown ||= Redcarpet::Markdown.new(renderer, autolink: false, tables: true, lax_spacing: true)
+		@client.batches.retrieve(id: id)
+		return nil if batch["status"] != "completed"
+		
+		if !batch["output_file_id"].nil?
+			output = @client.files.content(id: batch["output_file_id"])
+			output.each do |line|
+				(model, field, id) = line["custom_id"].split("-")
+				item = model.constantize.find(id.to_i)
+				content = line.dig("response", "body", "choices", 0, "message", "content")
+				item.send("#{field}=", markdown.render(content))
+				llmFixAndSave item
+			end
+			@client.files.delete(id: batch["output_file_id"])
+		elsif !batch["error_file_id"].nil?
+			puts @client.files.content(id: batch["error_file_id"])
+			@client.files.delete(id: batch["error_file_id"])
+		end
+		@client.files.delete(id: batch["input_file_id"])
+
+		# r = @client.batches.list
+		# r["data"].each do |batch|
+		# end
+	end
+
+	def self.llmFixAndSave product
+		product.meta_description.remove!("\"")
+		product.meta_keywords.remove!("\"")
+		product.meta_keywords.delete_prefix!("Купите ")
+		product.save!
+		if !product.meta_description.blank? and !product.meta_keywords.blank? and !product.description.blank?
+			variant = product.master
+			variant.sku.delete_suffix!("-gen4")
+			variant.sku.delete_suffix!("-gen5")
+			variant.sku.delete_suffix!("-gen6")
+			variant.sku += "-gen7" unless variant.sku.ends_with?("gen7")
+			variant.save!
+			product.activate!
+		end
+	end
+
+	def self.parallelBlock arr, in_threads: 1, &block
 		Parallel.each(arr, in_threads: in_threads) do |item|
 			ActiveRecord::Base.connection_pool.with_connection do
 				yield item
