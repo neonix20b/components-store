@@ -98,8 +98,11 @@ class BaseRoutine
 
 			product.set_property(source, product_number)
 			return product
+		elsif product.sku.end_with?("-gen4")
+			return product
+		else
+			return nil
 		end
-		return nil
 	end
 
 	def self.findOrCreateTaxon(title)
@@ -329,11 +332,16 @@ class BaseRoutine
 
 	def self.updateDescriptionsAsync
 		@client ||= OpenAI::Client.new
-		ids = Spree::Variant.where("sku ILIKE '%-gen4'").pluck(:product_id)
-		products = Spree::Product.where(id: ids).includes(:translations, :taxons, properties: [:translations])
+		#ids = Spree::Variant.where("sku ILIKE '%-gen4'").pluck(:product_id)
+		#products = Spree::Product.where(id: ids).includes(:translations, :taxons, properties: [:translations])
+		prop = Spree::Property.find_by_presentation("ai2")
+		products = prop.products.where(status: :draft).order(:id).includes(
+		            		:taxons, 
+		            		:translations,
+		            		properties: [:translations])
 		file_name = "tmp/batch_#{Time.now.to_i}.jsonl"
 		File.open(file_name, "w") do |f|
-		  products.each { |product| BaseRoutine.batchLinesFor(product).each{|item| f.puts(item.to_json)} }
+		  products.each { |product| batchLinesFor(product).each{|item| f.puts(item.to_json)} }
 		end
 		response = @client.files.upload(parameters: { file: file_name, purpose: "batch"} )
 		file_id = response["id"]
@@ -431,7 +439,6 @@ class BaseRoutine
 			product.meta_keywords.remove!("\"")
 			product.meta_keywords.delete_prefix!("Купите ")
 			product.meta_keywords = ActionView::Base.full_sanitizer.sanitize(product.meta_keywords).truncate(200, separator: ',', omission: '').chomp
-			puts "#{product.id} #{product.meta_keywords}"
 		end
 		product.save!
 		if !product.meta_description.blank? and !product.meta_keywords.blank? and !product.description.blank?
