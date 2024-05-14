@@ -30,7 +30,11 @@ class Mouser
 		             			}.to_json,
 		    			headers: HEADERS )
 		# puts result
-		hashFromResult(result["SearchResults"]["Parts"].first)
+		if result["SearchResults"].nil?
+			nil
+		else
+			hashFromResult(result["SearchResults"]["Parts"].first)
+		end
 	end
 
 	def self.searchProducts keyword: "", mfr: "", page: 0, &block
