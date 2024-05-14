@@ -1,6 +1,6 @@
 class BaseRoutine
 	# t = Spree::Taxon.find(34)
-	MIN_PRICE = 300
+	MIN_PRICE = 100
 	KEYWORDS = ["eval", "board", "kit", "FPGA", "PGA", "DAC", "ADC", "MCU", "PLD", "LDO", "DSP", "CMOS", "COB", "CPLD", "driver", "SoC", "Amplifier", "Logic", "PLL", "IC", "sensor", "PMIC", "Linear", "Interface", "Embedded", "Memory", "MOSFET", "RF"]
 	
 	def self.loadProductsFor taxon: nil, keywords: KEYWORDS, in_threads: 1
@@ -97,8 +97,9 @@ class BaseRoutine
 			stock.save!
 
 			product.set_property(source, product_number)
+			return product
 		end
-		return product
+		return nil
 	end
 
 	def self.findOrCreateTaxon(title)
@@ -366,7 +367,7 @@ class BaseRoutine
 		google = []
 		assistant_messages = [{role: "assistant", content: ai}] unless ai.blank?
 		if product.property("parameters2").nil?
-			return []
+			#return []
 			google = [
 				{role: "assistant", content: Google.askSearch(data:"\"#{product.name}\" #{vendors.join(", ")} (specification||datasheet)").join("\n\n")}
 			]
@@ -395,8 +396,9 @@ class BaseRoutine
 
 	def self.batchProcess id:
 		@client ||= OpenAI::Client.new
-		@markdown ||= Redcarpet::Markdown.new(renderer, autolink: false, tables: true, lax_spacing: true)
-		@client.batches.retrieve(id: id)
+		@renderer ||= Redcarpet::Render::HTML.new(no_links: true)
+		@markdown ||= Redcarpet::Markdown.new(@renderer, autolink: false, tables: true, lax_spacing: true)
+		batch = @client.batches.retrieve(id: id)
 		return nil if batch["status"] != "completed"
 		
 		if !batch["output_file_id"].nil?
@@ -405,7 +407,7 @@ class BaseRoutine
 				(model, field, id) = line["custom_id"].split("-")
 				item = model.constantize.find(id.to_i)
 				content = line.dig("response", "body", "choices", 0, "message", "content")
-				item.send("#{field}=", markdown.render(content))
+				item.send("#{field}=", @markdown.render(content))
 				llmFixAndSave item
 			end
 			@client.files.delete(id: batch["output_file_id"])
@@ -421,9 +423,16 @@ class BaseRoutine
 	end
 
 	def self.llmFixAndSave product
-		product.meta_description.remove!("\"")
-		product.meta_keywords.remove!("\"")
-		product.meta_keywords.delete_prefix!("Купите ")
+		unless product.meta_description.nil?
+			product.meta_description.remove!("\"") 
+			product.meta_description = ActionView::Base.full_sanitizer.sanitize(product.meta_description).chomp
+		end
+		unless product.meta_keywords.nil?
+			product.meta_keywords.remove!("\"")
+			product.meta_keywords.delete_prefix!("Купите ")
+			product.meta_keywords = ActionView::Base.full_sanitizer.sanitize(product.meta_keywords).truncate(200, separator: ',', omission: '').chomp
+			puts "#{product.id} #{product.meta_keywords}"
+		end
 		product.save!
 		if !product.meta_description.blank? and !product.meta_keywords.blank? and !product.description.blank?
 			variant = product.master
