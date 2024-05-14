@@ -3,7 +3,7 @@ class BaseRoutine
 	MIN_PRICE = 100
 	KEYWORDS = ["eval", "board", "kit", "FPGA", "PGA", "DAC", "ADC", "MCU", "PLD", "LDO", "DSP", "CMOS", "COB", "CPLD", "driver", "SoC", "Amplifier", "Logic", "PLL", "IC", "sensor", "PMIC", "Linear", "Interface", "Embedded", "Memory", "MOSFET", "RF"]
 	
-	def self.loadProductsFor taxon: nil, keywords: KEYWORDS, in_threads: 1
+	def self.loadProductsFor taxon: nil, keywords: KEYWORDS, in_threads: 1, pages: (0..30)
 		keywords = taxon.meta_keywords.split(",").map{|i|i.chomp} if keywords.nil?
 		mfr_ids = taxon.meta_keywords.split(",").map{|i|i.chomp.to_i}.compact.uniq
 		sep = mfr_ids.find_index(0)
@@ -19,7 +19,7 @@ class BaseRoutine
 			#ActiveRecord::Base.connection_pool.with_connection do
 				puts "Keyword: #{keyword}"
 				last_price = MIN_PRICE
-				(0..30).each do |page|
+				pages.each do |page|
 					next if last_price < MIN_PRICE
 					digikey.searchProducts keyword: keyword, mfr_ids: mfr_ids, offset: page*50 do |h|
 						if !h[:price].blank?
