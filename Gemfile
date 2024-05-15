@@ -102,3 +102,4 @@ gem 'parallel'
 gem 'hashie'
 gem "ruby-openai"
 gem 'redcarpet'
+gem 'spree_image_list_cms_sections', github: 'neonix20b/spree_image_list_cms_sections'
