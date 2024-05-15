@@ -38,7 +38,7 @@
                   <%= Spree.t(:subtotal) %>
                 </div>
                 <div class="shopping-cart-total-amount col align-self-end">
-                  <%= order_form.object.display_item_total.gsub(/\s/i,"&nbsp;").html_safe %>
+                  <%= order_form.object.display_item_total.to_s.gsub(/\s/i,"&nbsp;").html_safe %>
                 </div>
               </div>
               <% if !order_form.object.cart_promo_total.zero? %>
@@ -47,7 +47,7 @@
                     <%= Spree.t(:promotion) %>
                   </div>
                   <div class="shopping-cart-total-amount col align-self-end">
-                    <%= order_form.object.display_cart_promo_total.gsub(/\s/i,"&nbsp;").html_safe %>
+                    <%= order_form.object.display_cart_promo_total.to_s.gsub(/\s/i,"&nbsp;").html_safe %>
                   </div>
                 </div>
               <% end %>
@@ -66,7 +66,7 @@
                   <%= Spree.t(:subtotal) %>
                 </div>
                 <div class="shopping-cart-total-amount col align-self-end">
-                  <%= order_form.object.display_item_total.gsub(/\s/i,"&nbsp;").html_safe %>
+                  <%= order_form.object.display_item_total.to_s.gsub(/\s/i,"&nbsp;").html_safe %>
                 </div>
               </div>
               <% if !order_form.object.cart_promo_total.zero? %>
@@ -75,7 +75,7 @@
                     <%= Spree.t(:promotion) %>
                   </div>
                   <div class="shopping-cart-total-amount col align-self-end">
-                    <%= order_form.object.display_cart_promo_total.gsub(/\s/i,"&nbsp;").html_safe %>
+                    <%= order_form.object.display_cart_promo_total.to_s.gsub(/\s/i,"&nbsp;").html_safe %>
                   </div>
                 </div>
               <% end %>
