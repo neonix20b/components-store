@@ -192,6 +192,7 @@ ru:
     errors:
       messages:
         blank: не может быть пустым
+        email_is_invalid: Необходимо указать адрес электронной почты
       models:
         spree/calculator/tiered_flat_rate:
           attributes:

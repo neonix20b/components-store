@@ -85,7 +85,7 @@
               <% if order_form.object.item_total > 149_000 %>
                 <%= link_to Spree.t('cart_page.checkout'), spree.checkout_path, class: 'btn btn-primary text-uppercase font-weight-bold cart-checkout-btn shopping-cart-buttons-checkout', id: 'checkout-link', method: :get %>
               <%else%>
-                <%= link_to "Минимальный заказ 150 000 ₽", spree.checkout_path, class: 'btn btn-danger text-uppercase font-weight-bold cart-checkout-btn shopping-cart-buttons-checkout', id: 'checkout-link', method: :get %>
+                <%= link_to "Минимальный заказ 150 000 ₽", spree.cart_path, class: 'btn btn-danger text-uppercase font-weight-bold cart-checkout-btn shopping-cart-buttons-checkout', id: 'checkout-link', method: :get %>
               <%end%>
               <span class="text-uppercase shopping-cart-buttons-or d-lg-none"><%= Spree.t(:or) %></span>
               <%= link_to Spree.t(:continue_shopping), spree.products_path, class: 'btn btn-outline-primary text-uppercase font-weight-bold d-lg-none shopping-cart-buttons-continue' %>
