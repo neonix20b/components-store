@@ -26,9 +26,9 @@ ru:
         city: Населённый пункт
         company: Компания
         country: Страна
-        firstname: Имя
+        firstname: Название компании
         label: Название адреса
-        lastname: Фамилия
+        lastname: ИНН / КПП компании
         phone: Телефон
         state: Область/Регион
         zipcode: Почтовый индекс
@@ -1774,7 +1774,7 @@ ru:
       resumed: Возобновлён
       returned: Возвращён
     order_success: Заказ успешно размещен
-    order_success_explain: Информация о вашем заказе будет отправлена на вашу электронную
+    order_success_explain: Информация о вашем заказе, а также счет на оплату, будет отправлена на вашу электронную
       почту
     order_summary: Сводка по заказу
     order_sure_want_to: Вы уверены, что хотите %{event} этот заказ?
