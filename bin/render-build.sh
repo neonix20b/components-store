@@ -5,5 +5,8 @@ set -o errexit
 bundle install
 bundle exec rails assets:precompile
 bundle exec rails assets:clean
-bundle exec rake sitemap:refresh:no_ping
-bundle exec rake feeds
+
+if ! test -f public/sitemap.xml.gz; then
+  bundle exec rake sitemap:refresh:no_ping
+  bundle exec rake feeds
+fi
