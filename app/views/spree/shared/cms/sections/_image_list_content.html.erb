@@ -13,7 +13,7 @@
     <div class="row">
         <% if section.image_one&.attachment&.attached? %>
             <div class="col-12 col-md-3 px-4 vendors-list-item-image">
-                <img class="d-md-none lazyload"
+                <img class="lazyload"
                     data-src="<%= main_app.cdn_image_url(section.img_one_md) %>"
                     data-srcset="<%= main_app.cdn_image_url(section.img_one_md) %>"
                     alt="<%= section&.title %>">
@@ -29,6 +29,36 @@
         <div class="col-12 col-md-3 d-flex flex-column align-items-end justify-content-center">
             <div class="vendors-list-item-btn w-75">
                 <%= link_to "Shop Now", link_one, class: "btn btn-primary w-100" %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-md-none vendors-list-item--mobile">
+    <button class="p-0 btn w-100" type="button" data-toggle="collapse" data-target="#vendor-description-<%=section.id%>" aria-expanded="false" aria-controls="vendor-description-<%=section.id%>">
+        <% if section.title.present? %>
+            <h4 class="text-left my-2"><%=section.title%></h4>
+        <%end%>
+    </button>
+    <div class="collapse" id="vendor-description-<%=section.id%>">
+        <div>
+            <div class="vendors-list-item-image">
+            <% if section.image_one&.attachment&.attached? %>
+                <img class="d-md-none lazyload"
+                        data-src="<%= main_app.cdn_image_url(section.img_one_md) %>"
+                        data-srcset="<%= main_app.cdn_image_url(section.img_one_md) %>"
+                        alt="<%= section&.title %>">
+            <%end%>
+            </div>
+            <% if section.description.present? %>
+                <div class="my-4">
+                    <%= section.description %>
+                </div>
+            <%end%>
+            <div class="mb-4 d-flex justify-content-end">
+                <div class="w-50 text-right">
+                    <%= link_to "Shop Now", link_one, class: "btn btn-primary w-75" %>
+                </div>
             </div>
         </div>
     </div>
