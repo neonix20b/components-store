@@ -63,7 +63,7 @@
             <div class="text-right shopping-cart-total d-lg-none">
               <div class="row no-gutters align-items-center">
                 <div class="text-uppercase shopping-cart-total-text col-8 mr-0">
-                  <%= Spree.t(:subtotal) %>
+                  <%= Spree.t(:subtotal) %>&nbsp;
                 </div>
                 <div class="shopping-cart-total-amount col align-self-end">
                   <%= order_form.object.display_item_total.to_s.gsub(/\s/i,"&nbsp;").html_safe %>
@@ -82,7 +82,7 @@
             </div>
 
             <div class="d-flex flex-column text-center shopping-cart-buttons" data-hook="cart_buttons">
-              <%= order_form.object.try(:item_total)%>
+              <%#= order_form.object.try(:item_total)%>
               <%= link_to Spree.t('cart_page.checkout'), spree.checkout_path, class: 'btn btn-primary text-uppercase font-weight-bold cart-checkout-btn shopping-cart-buttons-checkout', id: 'checkout-link', method: :get %>
               <span class="text-uppercase shopping-cart-buttons-or d-lg-none"><%= Spree.t(:or) %></span>
               <%= link_to Spree.t(:continue_shopping), spree.products_path, class: 'btn btn-outline-primary text-uppercase font-weight-bold d-lg-none shopping-cart-buttons-continue' %>

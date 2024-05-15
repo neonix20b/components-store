@@ -21,8 +21,8 @@ ru:
   activerecord:
     attributes:
       spree/address:
-        address1: Адрес
-        address2: адрес (продолж.)
+        address1: Контактное лицо
+        address2: Адрес
         city: Населённый пункт
         company: Компания
         country: Страна
