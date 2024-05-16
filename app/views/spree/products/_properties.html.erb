@@ -5,7 +5,7 @@
       <% if product_property.show_property? %>
         <li>
           <span class="font-weight-bold text-break"><%= product_property.property.presentation %>:</span>
-          <span class="text-break"><%= product_property.value %></span>
+          <span class="text-break"><%= product_property.value.start_with?(*["http", "ftp"]) ? link_to("Перейти", product_property.value) : product_property.value %></span>
         </li>
       <% end %>
     <% end %>

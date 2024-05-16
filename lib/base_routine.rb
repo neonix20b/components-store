@@ -156,13 +156,7 @@ class BaseRoutine
 		end
 	end
 
-	def self.clean
-		#arr = Spree::Product.all.map{ |product| product.images.count > 0 ? nil : product.id }
-		#arr.compact!
-		ids = Spree::Product.where(status: :draft).map{|product| product.cost_price > MIN_PRICE ? nil : product.id}.compact
-		products = Spree::Product.where(id: ids)
-		products.each{|product| product.archive!}
-
+	def self.cleanProperties
 		Spree::ProductProperty.where(property_id: [1,3,8,9,10], show_property: true).each do |prop|
 		    prop.show_property = false
 		    prop.save!
