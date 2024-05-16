@@ -647,7 +647,7 @@ ru:
         content: Содержание
         draft_mode: Режим черновика
         fit: Подогнать по
-        full_screen_mode: <span class="exit">Выйти</span> из Режима Полного Экрана
+        full_screen_mode: Режим Полного Экрана <span class="exit">(Выйти)</span>
         full_width: Полная ширина
         full_width_on_small: Полная ширина на малых устройствах
         go_to_fullscreen_section_manager: Перейти к полноэкранному Менеджеру разделов

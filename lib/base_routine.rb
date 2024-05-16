@@ -118,23 +118,6 @@ class BaseRoutine
 		end
 	end
 
-	def massUpdate ids
-		# Spree::Product.where(id: ids).each do |product|
-		# 	vendors = product.taxons.pluck(:meta_title)
-		# 	product.description = "#{product.meta_title} от #{vendors.join(', ')}"
-		# 	product.save!
-		# end
-		# Spree::Variant.where("sku ILIKE '%-gen2'").each do |v|
-		# 	v.sku.delete_suffix!("-gen2")
-		# 	v.sku += "-gen"
-		# 	v.save!
-		# end
-		# Spree::Product.all.each do |product|
-		# 	product.price = product.cost_price * k
-		# 	product.save!
-		# end
-	end
-
 	def self.status
 		count = Spree::Variant.all.count
 		arr = ["","2","4", "5"].map{|i| Spree::Variant.where("sku ILIKE '%-gen#{i}'").count}
@@ -157,10 +140,7 @@ class BaseRoutine
 	end
 
 	def self.cleanProperties
-		Spree::ProductProperty.where(property_id: [1,3,8,9,10], show_property: true).each do |prop|
-		    prop.show_property = false
-		    prop.save!
-		end
+		Spree::ProductProperty.where(property_id: [1,3,8,9,10], show_property: true).update_all(show_property: false)
 	end
 
 	def self.updateProduct product, h: {}
@@ -199,9 +179,9 @@ class BaseRoutine
 					File.delete(filename)
 				end
 			end
-			product.set_property("DataSheet", h[:datasheet]) unless h[:datasheet].blank?
+			product.set_property("DataSheet-M", h[:datasheet]) unless h[:datasheet].blank?
 			product.set_property("ai", h[:description]) unless h[:description].blank?
-			product.set_property("DataSheet2", h[:datasheet2]) unless h[:datasheet2].blank?
+			product.set_property("DataSheet-D", h[:datasheet2]) unless h[:datasheet2].blank?
 			product.set_property("ai2", h[:description2]) unless h[:description2].blank?
 			product.set_property("digikey", h[:digikey]) unless h[:digikey].blank?
 			product.set_property("parameters2", h[:parameters2]) unless h[:parameters2].blank?
