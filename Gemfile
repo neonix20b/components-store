@@ -61,8 +61,8 @@ group :development do
   # gem "spring"
   # gem 'smarter_csv'
   # gem 'kramdown'
-  # gem 'langchainrb'
-  # gem 'i18n-tasks'
+  gem 'langchainrb'
+  gem 'i18n-tasks'
 end
 
 group :test do
