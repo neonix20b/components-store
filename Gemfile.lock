@@ -221,7 +221,6 @@ GEM
       activerecord (>= 4.2)
     addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
-    ast (2.4.2)
     auto_strip_attributes (2.6.0)
       activerecord (>= 4.0)
     autoprefixer-rails (10.4.16.0)
@@ -248,7 +247,6 @@ GEM
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
       execjs (~> 2.0)
-    baran (0.1.11)
     base64 (0.2.0)
     bcrypt (3.1.20)
     bigdecimal (3.1.8)
@@ -274,7 +272,6 @@ GEM
       xpath (~> 3.2)
     carmen (1.1.3)
       activesupport (>= 3.0.0)
-    colorize (1.1.0)
     concurrent-ruby (1.2.3)
     connection_pool (2.4.1)
     crass (1.0.6)
@@ -333,16 +330,6 @@ GEM
       multi_xml (>= 0.5.2)
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
-    i18n-tasks (1.0.14)
-      activesupport (>= 4.0.2)
-      ast (>= 2.1.0)
-      erubi
-      highline (>= 2.0.0)
-      i18n
-      parser (>= 3.2.2.1)
-      rails-i18n
-      rainbow (>= 2.2.2, < 4.0)
-      terminal-table (>= 1.5.1)
     i18n_data (0.17.1)
       simple_po_parser (~> 1.1)
     image_processing (1.12.2)
@@ -369,8 +356,6 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (7.0.0)
       railties (>= 3.2.16)
-    json-schema (4.3.0)
-      addressable (>= 2.8)
     jsonapi-serializer (2.2.0)
       activesupport (>= 4.2)
     kaminari (1.2.2)
@@ -388,16 +373,6 @@ GEM
     kaminari-i18n (0.5.0)
       kaminari
       rails
-    langchainrb (0.13.1)
-      activesupport (>= 7.0.8)
-      baran (~> 0.1.9)
-      colorize (~> 1.1.0)
-      json-schema (~> 4)
-      matrix
-      pragmatic_segmenter (~> 0.3.0)
-      tiktoken_ruby (~> 0.0.8)
-      to_bool (~> 2.0.0)
-      zeitwerk (~> 2.5)
     loofah (2.22.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -465,13 +440,8 @@ GEM
     parallel (1.24.0)
     paranoia (2.6.3)
       activerecord (>= 5.1, < 7.2)
-    parser (3.3.1.0)
-      ast (~> 2.4.1)
-      racc
     pg (1.5.6)
     popper_js (1.16.1)
-    pragmatic_segmenter (0.3.23)
-      unicode
     psych (5.1.2)
       stringio
     public_suffix (5.0.5)
@@ -521,13 +491,11 @@ GEM
       rake (>= 12.2)
       thor (~> 1.0, >= 1.2.2)
       zeitwerk (~> 2.6)
-    rainbow (3.1.1)
     rake (13.2.1)
     ransack (4.1.1)
       activerecord (>= 6.1.5)
       activesupport (>= 6.1.5)
       i18n
-    rb_sys (0.9.97)
     rdoc (6.6.3.1)
       psych (>= 4.0.0)
     redcarpet (3.6.0)
@@ -622,29 +590,17 @@ GEM
     stringex (2.8.6)
     stringio (3.1.0)
     strscan (3.1.0)
-    terminal-table (3.0.2)
-      unicode-display_width (>= 1.1.1, < 3)
     thor (1.3.1)
-    tiktoken_ruby (0.0.8)
-      rb_sys (>= 0.9.86)
-    tiktoken_ruby (0.0.8-aarch64-linux)
-    tiktoken_ruby (0.0.8-arm-linux)
-    tiktoken_ruby (0.0.8-arm64-darwin)
-    tiktoken_ruby (0.0.8-x86_64-darwin)
-    tiktoken_ruby (0.0.8-x86_64-linux)
     tilt (2.3.0)
     timeout (0.4.1)
     tinymce-rails (5.10.9)
       railties (>= 3.1.1)
-    to_bool (2.0.0)
     turbo-rails (2.0.5)
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    unicode (0.4.4.4)
-    unicode-display_width (2.5.0)
     uri (0.13.0)
     validates_zipcode (0.5.2)
       activemodel (>= 4.2.0)
@@ -680,11 +636,9 @@ DEPENDENCIES
   debug
   hashie
   httparty
-  i18n-tasks
   image_processing (~> 1.2)
   importmap-rails
   jbuilder
-  langchainrb
   mailgun-ruby
   mini_magick
   mission_control-jobs
