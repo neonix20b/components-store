@@ -9,7 +9,7 @@ class Message < ApplicationRecord
 
   def broadcast_update
     broadcast_replace_later_to(
-      dom_id(self),
+      "#{dom_id(self.customer)}_messages",
       partial: 'assistants/message',
       locals: { message: self, scroll_to: true }
     )

@@ -1,5 +1,5 @@
 <%= turbo_frame_tag(dom_id message) do %>
-  <p class="my-5">
+  <p class="my-0">
     <strong class="block font-medium mb-1"><%= message.role %>:</strong>
     <%= markdown(message.content).html_safe %>
     <%#= message.created_at.strftime("%Y-%m-%d %H:%M:%S") %>

@@ -3,6 +3,7 @@ class Spree::MessagesController < Spree::StoreController
 
   def create
     spree_current_user.messages.destroy_all
+    @sys ||= Spree::Store.default.configs.find_by(name: "ai").payload["sys_messages"]
     @message_user = spree_current_user.messages.create(message_params.merge(role: "user"))
     @message = spree_current_user.messages.create(role: "assistant", content: "")
     Thread.new { 
@@ -11,7 +12,7 @@ class Spree::MessagesController < Spree::StoreController
         @client.chat(
             parameters: {
                 model: "gpt-4o", # Required.
-                messages: [{ role: "user", content: @message_user.content}], # Required.
+                messages: @sys+[{ role: "user", content: @message_user.content} ], # Required.
                 temperature: 0.7,
                 stream: proc do |chunk, _bytesize|
                     chunk = chunk.dig("choices", 0, "delta", "content")
