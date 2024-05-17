@@ -1,0 +1,18 @@
+<div class="relative flex flex-col min-w-min mb-6 break-words bg-white border-3 shadow-soft-xl rounded-2xl bg-clip-border">
+    <div class="flex-auto p-2 mx-2">
+        <div>
+            <%= turbo_stream_from "#{dom_id(user)}_messages" %>
+            <div id="<%= dom_id(user) %>_messages" class="min-w-full">
+                <%= render partial: "assistants/message", collection: messages, as: :message %>
+            </div>
+
+            <div class="flex-auto w-full">
+            <%= form_for Message.new do |f| %>
+                <div class="form-group mb-4">
+                    <%= f.text_field :content, class: 'spree-flat-input', placeholder: "Подбери аналог для ..." %>
+                    <%= f.submit "Спросить", class: 'btn btn-lg btn-block btn-primary text-uppercase font-weight-bold' %>
+                </div>
+            <%end%>
+        </div>
+    </div>
+</div>
