@@ -7,7 +7,7 @@
             </div>
 
             <div class="flex-auto w-full">
-            <%= form_for Message.new do |f| %>
+            <%= form_with model: Message.new(customer: user), url: spree.messages_path do |f| %>
                 <div class="form-group mb-4">
                     <%= f.text_field :content, class: 'spree-flat-input', placeholder: "Подбери аналог для ..." %>
                     <%= f.submit "Спросить", class: 'btn btn-lg btn-block btn-primary text-uppercase font-weight-bold' %>

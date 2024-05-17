@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'messages/create'
   get '/t/redirect/:page', to: redirect('/pages/%{page}')
   # This line mounts Spree's routes at the root of your application.
   # This means, any requests to URLs such as /products, will go to
@@ -18,6 +19,10 @@ Rails.application.routes.draw do
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
+
+  Spree::Core::Engine.routes.prepend do
+    resources :messages
+  end
 
   # Defines the root path route ("/")
   # root "posts#index"
