@@ -3,7 +3,7 @@
         <div>
             <%= turbo_stream_from "#{dom_id(user)}_messages" %>
             <div id="<%= dom_id(user) %>_messages" class="min-w-full">
-                <%= render partial: "assistants/message", collection: messages, as: :message %>
+                <%= render partial: "assistants/message", collection: user.messages, as: :message %>
             </div>
 
             <div class="flex-auto w-full">
