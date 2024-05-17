@@ -12,7 +12,10 @@ class Spree::MessagesController < Spree::StoreController
         @client.chat(
             parameters: {
                 model: "gpt-4o", # Required.
-                messages: @sys+[{ role: "user", content: @message_user.content} ], # Required.
+                messages: @sys+[
+                  {role: "assistant", content: Google.askSearch(data: @message_user.content).join("\n\n")},
+                  { role: "user", content: @message_user.content} 
+                ], # Required.
                 temperature: 0.7,
                 stream: proc do |chunk, _bytesize|
                     chunk = chunk.dig("choices", 0, "delta", "content")
