@@ -10,7 +10,7 @@ services:
     region: frankfurt
     runtime: ruby
     plan: starter
-    buildCommand: "./bin/render-build.sh"
+    buildCommand: "./bin/render-build.sh worker"
     startCommand: "bundle exec rake solid_queue:start"
     envVars:
       - key: DATABASE_URL
@@ -29,7 +29,7 @@ services:
     region: frankfurt
     runtime: ruby
     plan: standard
-    buildCommand: "./bin/render-build.sh"
+    buildCommand: "./bin/render-build.sh web"
     preDeployCommand: "bundle exec rails db:migrate"
     startCommand: "bundle exec rails server"
     healthCheckPath: /up

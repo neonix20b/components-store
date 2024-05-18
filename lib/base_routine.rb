@@ -25,7 +25,7 @@ class BaseRoutine
 							last_price = h[:price].to_i
 							if  last_price > MIN_PRICE
 								part_number = h[:part_number]
-								puts "[#{keyword}/#{page}] #{part_number} $#{last_price}"
+								puts "#{taxon.id}: #{taxon.meta_title} [#{keyword}/#{page}] #{part_number} $#{last_price}"
 								product = findOrCreateProduct part_number: part_number, availability: h[:qty], price: last_price, product_number: h[:digikey], source: "digikey"
 								unless product.nil?
 									if product.description.blank?
