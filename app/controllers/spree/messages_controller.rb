@@ -26,7 +26,12 @@ class Spree::MessagesController < Spree::StoreController
         #@message.broadcast_create 
       end
     }
-    redirect_to account_path, notice: "Message was successfully created."
+    redirect_to account_path, notice: "Задан новый вопрос"
+  end
+
+  def destroy
+    spree_current_user.messages.destroy_all
+    redirect_to account_path, notice: "Все сообщения были удалены."
   end
 
   private

@@ -1858,7 +1858,7 @@ ru:
       not_found_filters1: Мы не нашли соответствий для этих фильтров.
       not_found_filters2: Попробуйте еще раз.
       not_found_text1: Мы не нашли товары для '%{keywords}'.
-      not_found_text2: Попробуйте другой поиск.
+      not_found_text2: Попробуйте другую поисковую фразу.
       price: Цена
       price_high_to_low: Цена по убыв.
       price_low_to_high: Цена по возр.
