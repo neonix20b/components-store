@@ -77,12 +77,13 @@
       <p class="text-center"><%= Spree.t(:you_have_no_orders_yet) %></p>
     <% end %>
   </div>
+
+  <hr/>
   <div data-hook="account_my_ai" class="account-page-ai" id="account-my-ai">
     <h3 class="text-uppercase spree-mb-medium spree-mt-medium spree-header">ИИ-ассистент</h3>
     <%= render "assistants/assistant", user: @user %>
   </div>
 
-  </div>
   <div id="delete-address-popup" class="delete-address-popup-dropdown hide-on-esc">
     <%= render 'spree/shared/delete_address_popup' %>
   </div>
