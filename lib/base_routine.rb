@@ -18,9 +18,8 @@ class BaseRoutine
 		keywords.each do |keyword|
 			#ActiveRecord::Base.connection_pool.with_connection do
 				puts "Keyword: #{keyword}"
-				last_price = MIN_PRICE
+				last_price = 0
 				pages.each do |page|
-					next if last_price < MIN_PRICE
 					digikey.searchProducts keyword: keyword, mfr_ids: mfr_ids, offset: page*50 do |h|
 						if !h[:price].blank?
 							last_price = h[:price].to_i
@@ -53,6 +52,7 @@ class BaseRoutine
 							end
 						end
 					end
+					break if last_price < MIN_PRICE
 				end
 			#end
 		end
