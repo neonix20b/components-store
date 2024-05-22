@@ -39,7 +39,17 @@
     <%= render partial: 'gallery_modal' %>
   </div>
   <div id="related-products"></div>
-
+  <div class="d-sm-none">
+    <div id="yandex_rtb_R-A-8440375-5"></div>
+    <script>
+    window.yaContextCb.push(()=>{
+      Ya.Context.AdvManager.render({
+        "blockId": "R-A-8440375-5",
+        "renderTo": "yandex_rtb_R-A-8440375-5"
+      })
+    })
+    </script>
+  </div>
   <%= products_structured_data([@product]) %>
 
   <%= render 'spree/shared/product_added_modal' %>

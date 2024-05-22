@@ -59,10 +59,9 @@ class BaseRoutine
 	end
 
 	def mmm product
-		taxon = product.taxons.first
-		product.description = "#{product.name} от #{taxon.name}"
-		product.sku.delete_suffix!("-gen6")
-		product.sku.delete_suffix!("-gen5")
+		product.description.remove!("```markdown")
+		product.description.remove!("```")
+		product.description.remove!("<p></p>")
 		product.save!
 	end
 
@@ -405,6 +404,10 @@ class BaseRoutine
 	end
 
 	def self.llmFixAndSave product
+		product.description.remove!("```markdown")
+		product.description.remove!("```")
+		product.description.remove!("<p></p>")
+		product.description.strip!
 		unless product.meta_description.nil?
 			product.meta_description.remove!("\"") 
 			product.meta_description = ActionView::Base.full_sanitizer.sanitize(product.meta_description).chomp
