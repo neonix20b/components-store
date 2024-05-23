@@ -56,11 +56,12 @@ class Digikey
 			rateLimit(resp) if resp["status"] == 429
 			return nil if resp["status"] == 404
 			return nil if resp["status"] == 500
-			return nil if resp["Products"].empty?
-
+			
 			FileUtils.mkpath(CACHE_DIR) unless File.exist?(CACHE_DIR)
 			File.write(cache, resp.body)
+			return nil if resp["Products"].empty?
 		else
+			puts "Get from cache"
 			resp = JSON.parse File.read(cache)
 		end
 
