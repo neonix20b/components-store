@@ -37,6 +37,7 @@ services:
      - 'components.oxteam.me'
      - 'smart-components.store'
      - 'smart-components.pro'
+     - 'pokrovich.pro'
     envVars:
       - key: DATABASE_URL
         fromDatabase:
