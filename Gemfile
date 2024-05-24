@@ -79,17 +79,16 @@ gem "mission_control-jobs"
 gem "solid_cache"
 
 # Spree gems
-spree_opts = { github: "spree/spree", branch: "main"}
-gem "spree", spree_opts
-gem "spree_emails", spree_opts
-gem "spree_sample",  spree_opts
-gem "spree_backend", { github: "spree/spree_backend", branch: "main" }
+gem "spree"
+gem "spree_emails"
+gem "spree_backend"
+
 gem "spree_frontend", { github: "spree/spree_rails_frontend", branch: "main" }
 gem "spree_auth_devise"
 #gem "deface", { github: "spree/deface", branch: "master" }
 gem 'spree_sitemap', github: 'spree-contrib/spree_sitemap'
 gem "spree_gateway"
-gem "spree_i18n"
+# gem "spree_i18n"
 
 # only needed for MacOS and Ruby 3.0
 gem 'sassc', github: 'sass/sassc-ruby', branch: 'master'

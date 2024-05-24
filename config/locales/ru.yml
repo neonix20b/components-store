@@ -522,6 +522,7 @@ ru:
       already_confirmed: уже был подтвержден
       not_found: не найден
       not_locked: не был заблокирован
+      email_is_invalid: Необходимо указать адрес электронной почты
       not_saved:
         many: "%{count} ошибок препятствуют сохранению %{resource}:"
         one: 'Одна ошибка препятствует сохранению %{resource}:'
