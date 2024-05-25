@@ -1,0 +1,27 @@
+<!-- insert_after "br" -->
+<div id="select-customer" class="card mb-3" data-hook="">
+    <div class="card-header">
+      <h5 class="card-title mb-0 h6">
+        Отправить письмо
+      </h5>
+    </div>
+    <div class="card-body" id="customer-email-field">
+      <%= form_with url: spree.email_messages_path, method: :post do |f| %>
+        <p>От: <b><%= current_store.customer_support_email %></b></p>
+        <%= f.hidden_field :from, value: current_store.customer_support_email %>
+        <div class="form-group">
+          <%= f.label :email, "Кому:" %>
+          <%= f.email_field :email, value: @order.email, class: 'form-control' %>
+        </div>
+        <div class="form-group">
+          <%= f.label :subject, "Тема:" %>
+          <%= f.text_field :subject, value: "#{@order.number}: уточнение по заказу", class: 'form-control' %>
+        </div>
+        <div class="form-group">
+          <%= f.label :body, "Сообщение:" %>
+          <%= f.text_area :body, class: 'form-control' %>
+        </div>
+        <%= f.submit "Отправить" %>
+      <% end %>
+    </div>
+</div>

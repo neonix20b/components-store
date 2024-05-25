@@ -21,7 +21,11 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   Spree::Core::Engine.routes.prepend do
-    resources :messages
+    resources :messages do
+      collection do
+        post :email
+      end
+    end
   end
 
   # Defines the root path route ("/")

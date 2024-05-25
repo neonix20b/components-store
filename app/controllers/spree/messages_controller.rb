@@ -1,5 +1,17 @@
 class Spree::MessagesController < Spree::StoreController
   #load_and_authorize_resource class: Spree::Address
+  
+  def email
+    if current_spree_user.admin?
+      ret = ActionMailer::Base.mail(
+        from: params[:from],
+        to: params[:email],
+        subject: params[:subject],
+        body: params[:body]
+      ).deliver_now
+      redirect_back(fallback_location: root_path, notice: "Сообщение отправлено #{ret.message_id}")
+    end
+  end
 
   def create
     spree_current_user.messages.destroy_all

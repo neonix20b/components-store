@@ -85,7 +85,7 @@ gem "spree_backend"
 
 gem "spree_frontend", { github: "spree/spree_rails_frontend", branch: "main" }
 gem "spree_auth_devise"
-#gem "deface", { github: "spree/deface", branch: "master" }
+gem "deface"#, { github: "spree/deface", branch: "master" }
 gem 'spree_sitemap', github: 'spree-contrib/spree_sitemap'
 gem "spree_gateway"
 gem "spree_i18n"
