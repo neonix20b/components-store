@@ -7,7 +7,8 @@ class Spree::MessagesController < Spree::StoreController
         from: params[:from],
         to: params[:email],
         subject: params[:subject],
-        body: params[:body]
+        body: params[:body],
+        domain: params[:from].split("@").last
       ).deliver_now
       redirect_back(fallback_location: root_path, notice: "Сообщение отправлено #{ret.message_id}")
     end

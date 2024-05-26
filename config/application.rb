@@ -25,6 +25,14 @@ module SpreeStarter
     config.i18n.default_locale = :ru
     I18n.locale = :ru
     # config.i18n.fallbacks = [:ru]
+    
+    config.action_mailer.delivery_method = :mailgun
+    config.action_mailer.mailgun_settings = {
+      api_key: ENV["MAILGUN_KEY"],
+      domain: 'smart-components.pro',
+      api_host: 'api.eu.mailgun.net',  # Uncomment this line for EU region domains
+      timeout: 60 # Default depends on rest-client, whose default is 60s. Added in 1.2.3.
+    }
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.

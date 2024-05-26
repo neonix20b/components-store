@@ -79,7 +79,7 @@ class BaseRoutine
 			product = @store.products.new(status: :draft, available_on: Time.now, shipping_category_id: 1, promotionable: false)
 			product.stores << @store
 			product.name = part_number
-			product.slug = part_number.downcase
+			product.slug = part_number.downcase.sub("+","-plus")
 			product.meta_title = part_number
 			product.price = price * 140
 			product.save!

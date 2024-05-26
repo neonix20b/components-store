@@ -72,14 +72,6 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "spree_starter_production"
 
   config.action_mailer.perform_caching = false
-
-  config.action_mailer.delivery_method = :mailgun
-  config.action_mailer.mailgun_settings = {
-    api_key: ENV["MAILGUN_KEY"],
-    domain: 'smart-components.pro',
-    api_host: 'api.eu.mailgun.net',  # Uncomment this line for EU region domains
-    timeout: 60 # Default depends on rest-client, whose default is 60s. Added in 1.2.3.
-  }
   
   config.action_mailer.default_url_options = { host: "smart-components.pro" }
 
