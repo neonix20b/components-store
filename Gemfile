@@ -85,13 +85,13 @@ gem "spree_backend"
 
 gem "spree_frontend", { github: "spree/spree_rails_frontend", branch: "main" }
 gem "spree_auth_devise"
-gem "deface"#, { github: "spree/deface", branch: "master" }
+gem "deface"
 gem 'spree_sitemap', github: 'spree-contrib/spree_sitemap'
 gem "spree_gateway"
 gem "spree_i18n"
 
 # only needed for MacOS and Ruby 3.0
-gem 'sassc', github: 'sass/sassc-ruby', branch: 'master'
+gem 'sassc'
 gem "aws-sdk-s3", require: false
 gem 'csv'
 gem 'rack-host-redirect'

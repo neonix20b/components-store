@@ -7,14 +7,6 @@ GIT
       spree_extension
 
 GIT
-  remote: https://github.com/sass/sassc-ruby.git
-  revision: 4fce2b635ca5d616a8b1381c64846410bc785ea4
-  branch: master
-  specs:
-    sassc (2.4.0)
-      ffi (~> 1.9)
-
-GIT
   remote: https://github.com/spree-contrib/spree_sitemap.git
   revision: 20a0afb3ff6255fcdd7ea8fa7e8a5ee6f9fc6398
   specs:
@@ -485,6 +477,8 @@ GEM
     rubyzip (2.3.2)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
+    sassc (2.4.0)
+      ffi (~> 1.9)
     sassc-rails (2.1.2)
       railties (>= 4.0.0)
       sassc (>= 2.0)
@@ -653,7 +647,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.14)
+    zeitwerk (2.6.15)
 
 PLATFORMS
   aarch64-linux
@@ -688,7 +682,7 @@ DEPENDENCIES
   redcarpet
   redis (>= 4.0.1)
   ruby-openai
-  sassc!
+  sassc
   selenium-webdriver
   solid_cache
   solid_queue
