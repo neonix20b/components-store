@@ -1,9 +1,9 @@
 class BaseRoutine
 	# t = Spree::Taxon.find(34)
-	MIN_PRICE = 30
+	MIN_PRICE = 20
 	KEYWORDS = ["eval", "board", "kit", "FPGA", "PGA", "DAC", "ADC", "MCU", "PLD", "LDO", "DSP", "CMOS", "COB", "CPLD", "driver", "SoC", "Amplifier", "Logic", "PLL", "IC", "sensor", "PMIC", "Linear", "Interface", "Embedded", "Memory", "MOSFET", "RF"]
 	
-	def self.loadProductsFor taxon: nil, keywords: KEYWORDS, in_threads: 1, pages: (0..100)
+	def self.loadProductsFor taxon: nil, keywords: KEYWORDS, in_threads: 1, pages: (0..200), min_price: MIN_PRICE
 		keywords = taxon.meta_keywords.split(",").map{|i|i.chomp} if keywords.nil?
 		mfr_ids = taxon.meta_keywords.split(",").map{|i|i.chomp.to_i}.compact.uniq
 		sep = mfr_ids.find_index(0)
@@ -23,7 +23,7 @@ class BaseRoutine
 					digikey.searchProducts keyword: keyword, mfr_ids: mfr_ids, offset: page*50 do |h|
 						if !h[:price].blank?
 							last_price = h[:price].to_i
-							if  last_price > MIN_PRICE
+							if  last_price > min_price
 								part_number = h[:part_number]
 								puts "#{taxon.id}: #{taxon.meta_title} [#{keyword}/#{page}] #{part_number} $#{last_price}"
 								product = findOrCreateProduct part_number: part_number, availability: h[:qty], price: last_price, product_number: h[:digikey], source: "digikey"
@@ -52,7 +52,7 @@ class BaseRoutine
 							end
 						end
 					end
-					break if last_price < MIN_PRICE
+					break if last_price < min_price
 				end
 			#end
 		end
