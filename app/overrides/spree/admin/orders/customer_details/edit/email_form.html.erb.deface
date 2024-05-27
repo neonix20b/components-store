@@ -7,8 +7,12 @@
     </div>
     <div class="card-body" id="customer-email-field">
       <%= form_with url: spree.email_messages_path, method: :post do |f| %>
-        <p>От: <b><%= current_store.customer_support_email %></b></p>
-        <%= f.hidden_field :from, value: current_store.customer_support_email %>
+        <p>Справочно: <b><%= current_store.customer_support_email %></b></p>
+        <div class="form-group">
+          <%= f.label :from, "От:" %>
+          <%= f.email_field :from, value: "sales@#{current_store.url}", class: 'form-control' %>
+        </div>
+        <%#= f.hidden_field :from, value: current_store.customer_support_email %>
         <div class="form-group">
           <%= f.label :email, "Кому:" %>
           <%= f.email_field :email, value: @order.email, class: 'form-control' %>
@@ -20,6 +24,10 @@
         <div class="form-group">
           <%= f.label :body, "Сообщение:" %>
           <%= f.text_area :body, class: 'form-control' %>
+        </div>
+        <div class="form-group">
+          <%= f.label :file, "Вложение:" %>
+          <%= f.file_field :file %>
         </div>
         <%= f.submit "Отправить" %>
       <% end %>

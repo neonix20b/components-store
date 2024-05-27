@@ -3,14 +3,20 @@ class Spree::MessagesController < Spree::StoreController
   
   def email
     if current_spree_user.admin?
-      ret = ActionMailer::Base.mail(
+      mail = ActionMailer::Base.mail(
         from: params[:from],
         to: params[:email],
         subject: params[:subject],
         body: params[:body],
         domain: params[:from].split("@").last
-      ).deliver_now
-      redirect_back(fallback_location: root_path, notice: "Сообщение отправлено #{ret.message_id}")
+      )
+      if params[:file].present?
+        uploaded_io = params[:file]
+        mail.attachments[uploaded_io.original_filename] = uploaded_io.read
+      end
+
+      mail.deliver_now
+      redirect_back(fallback_location: root_path, notice: "Сообщение отправлено #{mail.message_id}")
     end
   end
 
