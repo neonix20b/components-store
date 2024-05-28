@@ -1,6 +1,6 @@
 class BaseRoutine
 	# t = Spree::Taxon.find(34)
-	MIN_PRICE = 20
+	MIN_PRICE = 10
 	KEYWORDS = ["eval", "board", "kit", "FPGA", "PGA", "DAC", "ADC", "MCU", "PLD", "LDO", "DSP", "CMOS", "COB", "CPLD", "driver", "SoC", "Amplifier", "Logic", "PLL", "IC", "sensor", "PMIC", "Linear", "Interface", "Embedded", "Memory", "MOSFET", "RF"]
 	
 	def self.loadProductsFor taxon: nil, keywords: KEYWORDS, in_threads: 1, pages: (0..200), min_price: MIN_PRICE
@@ -59,10 +59,11 @@ class BaseRoutine
 	end
 
 	def mmm product
-		product.description.remove!("```markdown")
-		product.description.remove!("```")
-		product.description.remove!("<p></p>")
-		product.save!
+		BaseRoutine.cleanProperties()
+		Spree::Product.all.includes(:master).map{|product|
+			product.price = product.cost_price * 160
+			product.save!
+		}
 	end
 
 	def self.findOrCreateProduct part_number: "", availability: 0, price: 0.0, product_number: "", source: ""
@@ -81,7 +82,7 @@ class BaseRoutine
 			product.name = part_number
 			product.slug = part_number.downcase.sub("+","-plus-").sub("#","-sharp-").sub("/","-slash-").sub("--","-").delete_suffix("-")
 			product.meta_title = part_number
-			product.price = price * 140
+			product.price = price * 160
 			product.save!
 
 			variant = product.master
