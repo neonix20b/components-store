@@ -60,9 +60,11 @@ class BaseRoutine
 
 	def mmm product
 		BaseRoutine.cleanProperties()
-		Spree::Product.all.includes(:master).map{|product|
+		Spree::Product.where("id > 32000").order(:id).includes(:master).each{|product|
 			product.price = product.cost_price * 160
 			product.save!
+			puts product.id
+			product = nil
 		}
 	end
 
@@ -188,128 +190,12 @@ class BaseRoutine
 		end
 	end
 
-	def self.makeDescriptionFor product
-		if product.description.size > 200
-			return nil
-		end
-		puts "[#{product.id}] #{product.name} (ai)"
-
-		I18n.locale = :ru
-		@config ||= Spree::Store.default.configs.find_by(name: "ai").payload
-		vendors = product.taxons.pluck(:name)
-		ai = [product.property("ai"),product.property("ai2")].compact.join("\n")
-		sys_messages = @config["sys_messages"]
-		sys_messages.append({role: "assistant", content: ai}) unless ai.blank?
-		parameters = []
-		google = []
-		if product.property("parameters2").nil?
-			google = [
-				{role: "assistant", content: Google.askSearch(data:"\"#{product.name}\" #{vendors.join(", ")} (specification||datasheet)").join("\n\n")}
-			]
-		else
-			parameters = [{role: "assistant", content: product.property("parameters2")}] 
-		end
-		user_messages = [
-			{role: "user", content: ActionView::Base.full_sanitizer.sanitize(product.description)}
-		]
-		Faraday.default_connection_options = {request: { open_timeout: 600, timeout: 600 }}
-		OpenAI.configure do |config|
-		    config.access_token = ENV.fetch("OPENAI")
-		    config.request_timeout = 600
-		end
-		renderer = Redcarpet::Render::HTML.new(no_links: true)
-		markdown = Redcarpet::Markdown.new(renderer, autolink: false, tables: true, lax_spacing: true)
-		#puts "make description #{product.name}"
-		llm = Langchain::LLM::OpenAI.new(api_key: ENV["OPENAI"], default_options:{chat_completion_model_name: 'gpt-4o'})
-		description = ""
-		if File.exist?("tmp/ai/#{product.id}.md")
-			description = File.read("tmp/ai/#{product.id}.md")
-		else
-			description = llm.chat(messages: sys_messages + parameters + google + user_messages).completion
-			File.write("tmp/ai/#{product.id}.md", description)
-		end
-		#puts "make meta description #{product.name}"
-		#if product.meta_description.blank?
-			meta_messages = [
-				{role: "user", content: @config["description"]}
-			]
-			meta_description = ""
-			if File.exist?("tmp/ai/#{product.id}_meta.md")
-				meta_description = File.read("tmp/ai/#{product.id}_meta.md")
-			else
-				meta_description = llm.chat(messages: sys_messages + user_messages + meta_messages).completion
-				File.write("tmp/ai/#{product.id}_meta.md", meta_description)
-			end
-			product.meta_description = meta_description.remove("\"")
-		#end
-
-		#if product.meta_keywords.blank?
-			meta_messages = [
-				{role: "assistant", content: meta_description },
-				{role: "user", content: @config["keywords"]}
-			]
-			meta_keywords = ""
-			if File.exist?("tmp/ai/#{product.id}_keywords.md")
-				meta_keywords = File.read("tmp/ai/#{product.id}_keywords.md")
-			else
-				meta_keywords = llm.chat(messages: sys_messages + user_messages + meta_messages).completion
-				File.write("tmp/ai/#{product.id}_keywords.md", meta_keywords)
-			end
-			product.meta_keywords = meta_keywords.remove("\"")
-			product.meta_keywords.delete_prefix!("Купите ")
-		#end
-		llm = nil
-
-		product.description = markdown.render(description)
-		
-		product.save!
-		variant = product.master
-		variant.sku += "-gen7" unless variant.sku.ends_with?("gen7")
-		variant.save!
-		product.activate!
-		File.delete("tmp/ai/#{product.id}.md")
-		File.delete("tmp/ai/#{product.id}_meta.md")
-		File.delete("tmp/ai/#{product.id}_keywords.md")
-	end
-
-	def self.updateAllDescriptions
-		# 13237ADC-BDM
-		# 119936-HMC686LP4
-		I18n.locale = :ru
-		prop = Spree::Property.find_by_presentation("ai2")
-		parallelBlock(prop.products.where(status: :draft).order(:id).includes(
-		            		:taxons, 
-		            		:translations,
-		            		:master)) do |product|
-		    #next if product.images.count == 0
-			variant = product.master
-			puts "#{product.name}"
-			if !variant.sku.ends_with?("gen7")# and product.images.count > 0
-				# vendors = product.taxons.pluck(:name)
-				# variant.sku.delete_suffix!("-gen5")
-				# variant.sku.delete_suffix!("-gen4")
-				# variant.sku.delete_suffix!("-gen2")
-				# variant.sku.delete_suffix!("-gen")
-				# variant.save!
-				# product.description = "#{product.name} от #{vendors.join(", ")}"
-				#puts "I am in thread! #{product.id}"
-				begin
-					makeDescriptionFor product
-					puts "end #{product.name}"
-				rescue => error
-					puts "[!] ERROR: #{error.message}"
-					sleep(60)
-				end
-			end
-		end
-	end
-
-	def self.updateDescriptionsAsync
+	def self.updateDescriptionsAsync limit: 10_000
 		@client ||= OpenAI::Client.new
 		#ids = Spree::Variant.where("sku ILIKE '%-gen4'").pluck(:product_id)
 		#products = Spree::Product.where(id: ids).includes(:translations, :taxons, properties: [:translations])
 		prop = Spree::Property.find_by_presentation("ai2")
-		products = prop.products.where(status: :draft).order(:id).includes(
+		products = prop.products.where(status: :draft).order(:id).limit(limit).includes(
 		            		:taxons, 
 		            		:translations,
 		            		properties: [:translations])
