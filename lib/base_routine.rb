@@ -190,12 +190,12 @@ class BaseRoutine
 		end
 	end
 
-	def self.updateDescriptionsAsync limit: 10_000
+	def self.updateDescriptionsAsync limit: 10_000, offset: 0
 		@client ||= OpenAI::Client.new
 		#ids = Spree::Variant.where("sku ILIKE '%-gen4'").pluck(:product_id)
 		#products = Spree::Product.where(id: ids).includes(:translations, :taxons, properties: [:translations])
 		prop = Spree::Property.find_by_presentation("ai2")
-		products = prop.products.where(status: :draft).order(:id).limit(limit).includes(
+		products = prop.products.where(status: :draft).order(:id).limit(limit).offset(offset).includes(
 		            		:taxons, 
 		            		:translations,
 		            		properties: [:translations])
