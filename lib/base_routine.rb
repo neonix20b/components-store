@@ -18,11 +18,11 @@ class BaseRoutine
 		keywords.each do |keyword|
 			#ActiveRecord::Base.connection_pool.with_connection do
 				puts "Keyword: #{keyword}"
-				last_price = 0
 				pages.each do |page|
+					last_price = 0
 					digikey.searchProducts keyword: keyword, mfr_ids: mfr_ids, offset: page*50 do |h|
 						if !h[:price].blank?
-							last_price = h[:price].to_i
+							last_price = h[:price].to_f
 							if  last_price > min_price
 								part_number = h[:part_number]
 								puts "#{taxon.id}: #{taxon.meta_title} [#{keyword}/#{page}] #{part_number} $#{last_price}"
@@ -190,7 +190,7 @@ class BaseRoutine
 		end
 	end
 
-	def self.updateDescriptionsAsync limit: 10_000, offset: 0
+	def self.updateDescriptionsAsync limit: 5_000, offset: 0
 		@client ||= OpenAI::Client.new
 		#ids = Spree::Variant.where("sku ILIKE '%-gen4'").pluck(:product_id)
 		#products = Spree::Product.where(id: ids).includes(:translations, :taxons, properties: [:translations])
