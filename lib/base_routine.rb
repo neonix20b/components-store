@@ -14,8 +14,8 @@ class BaseRoutine
 		digikey.getAccessToken()
 		I18n.locale = :ru
 
-		#parallelBlock(keywords, in_threads: in_threads) do |keyword|
-		keywords.each do |keyword|
+		parallelBlock(keywords, in_threads: in_threads) do |keyword|
+		#keywords.each do |keyword|
 			#ActiveRecord::Base.connection_pool.with_connection do
 				puts "Keyword: #{keyword}"
 				pages.each do |page|

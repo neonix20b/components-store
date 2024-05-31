@@ -60,7 +60,7 @@ class Digikey
 			FileUtils.mkpath(CACHE_DIR) unless File.exist?(CACHE_DIR)
 			File.write(cache, resp.body)
 		else
-			puts "Get from cache"
+			puts "Get from cache #{cache}"
 			resp = JSON.parse File.read(cache)
 		end
 
