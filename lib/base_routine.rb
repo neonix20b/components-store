@@ -33,11 +33,6 @@ class BaseRoutine
 										product.save!
 									end
 
-									if product.taxons.blank?
-										taxon.products << product
-										taxon.save!
-									end
-
 									updateProduct product, h: h
 
 									if h[:image].blank? and product.property("mouser").nil?
@@ -46,6 +41,11 @@ class BaseRoutine
 									end
 
 									product.save!
+
+									if product.taxons.blank?
+										taxon.products << product
+										taxon.save!
+									end
 
 									# makeDescriptionFor product
 								end
