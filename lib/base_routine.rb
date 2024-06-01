@@ -10,46 +10,46 @@ class BaseRoutine
 		mfr_ids = mfr_ids[0..sep-1] unless sep.nil?
 
 		return nil if mfr_ids.blank?
-		digikey = Digikey.new
-		digikey.getAccessToken()
+		@@digikey ||= Digikey.new
+		# digikey.getAccessToken()
 		I18n.locale = :ru
 
-		parallelBlock(keywords, in_threads: in_threads) do |keyword|
-		#keywords.each do |keyword|
+		#parallelBlock(keywords, in_threads: in_threads) do |keyword|
+		keywords.each do |keyword|
 			#ActiveRecord::Base.connection_pool.with_connection do
 				puts "Keyword: #{keyword}"
 				pages.each do |page|
 					last_price = 0
-					digikey.searchProducts keyword: keyword, mfr_ids: mfr_ids, offset: page*50 do |h|
+					@@digikey.searchProducts keyword: keyword, mfr_ids: mfr_ids, offset: page*50 do |h|
 						if !h[:price].blank?
 							last_price = h[:price].to_f
-							if  last_price > min_price
-								part_number = h[:part_number]
-								puts "#{taxon.id}: #{taxon.meta_title} [#{keyword}/#{page}] #{part_number} $#{last_price}"
-								product = findOrCreateProduct part_number: part_number, availability: h[:qty], price: last_price, product_number: h[:digikey], source: "digikey"
-								unless product.nil?
-									if product.description.blank?
-										product.description = "#{part_number} от #{taxon.name}"
-										product.save!
-									end
+							# if  last_price > min_price
+							# 	part_number = h[:part_number]
+							# 	puts "#{taxon.id}: #{taxon.meta_title} [#{keyword}/#{page}] #{part_number} $#{last_price}"
+							# 	product = findOrCreateProduct part_number: part_number, availability: h[:qty], price: last_price, product_number: h[:digikey], source: "digikey"
+							# 	unless product.nil?
+							# 		if product.description.blank?
+							# 			product.description = "#{part_number} от #{taxon.name}"
+							# 			product.save!
+							# 		end
 
-									if product.taxons.blank?
-										taxon.products << product
-										taxon.save!
-									end
+							# 		if product.taxons.blank?
+							# 			taxon.products << product
+							# 			taxon.save!
+							# 		end
 
-									updateProduct product, h: h
+							# 		updateProduct product, h: h
 
-									if h[:image].blank? and product.property("mouser").nil?
-										h2 = Mouser.searchDataFor part_number: part_number, mfr: taxon.meta_title
-										updateProduct product, h: h2
-									end
+							# 		if h[:image].blank? and product.property("mouser").nil?
+							# 			h2 = Mouser.searchDataFor part_number: part_number, mfr: taxon.meta_title
+							# 			updateProduct product, h: h2
+							# 		end
 
-									product.save!
+							# 		product.save!
 
-									# makeDescriptionFor product
-								end
-							end
+							# 		# makeDescriptionFor product
+							# 	end
+							# end
 						end
 					end
 					break if last_price < min_price

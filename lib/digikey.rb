@@ -38,6 +38,7 @@ class Digikey
 		cache = "#{CACHE_DIR}/#{keyword}_#{mfr_ids.join("-")}_#{offset}.json"
 		resp = nil
 		unless File.exist?(cache)
+			puts "request #{keyword}/#{offset}"
 			resp = HTTParty.post("https://api.digikey.com/products/v4/search/keyword",
 				headers: accessHeaders, 
 				body: {
@@ -60,11 +61,11 @@ class Digikey
 			FileUtils.mkpath(CACHE_DIR) unless File.exist?(CACHE_DIR)
 			File.write(cache, resp.body)
 		else
-			puts "Get from cache #{cache}"
+			puts "cache #{keyword}/#{offset}"
 			resp = JSON.parse File.read(cache)
 		end
 
-		return nil if resp["Products"].empty?
+		return nil if resp["Products"].blank?
 
 		resp["Products"].each do |result|
 			yield hashFromResult(result) unless result.blank?
@@ -103,7 +104,7 @@ class Digikey
 
 	def hashFromResult result
 		result.extend Hashie::Extensions::DeepFind
-		
+
 		parameters = []
 		parameters = result["Parameters"].map{|pt| "#{pt["ParameterText"]}: #{pt["ValueText"]}"} if result.has_key?("Parameters")
 
@@ -111,16 +112,16 @@ class Digikey
 		description += ["Status: #{result["ProductStatus"]["Status"]}"]
 		description += ["Category: #{result.deep_find_all("Name").uniq.filter{|r| r.size>5}.join("; ")}"]
 
-		h = {
-				description2: description.join("\n"),
-				datasheet2: fixUrl(result["DatasheetUrl"]),
-				parameters2: parameters.join("\n"),
-				image: fixUrl(result["PhotoUrl"]),
-				price: result["UnitPrice"],
-				digikey: result.deep_find("DigiKeyProductNumber"),
-				qty: result["QuantityAvailable"],
-				part_number: result["ManufacturerProductNumber"]
-			}
+		{
+			description2: description.join("\n"),
+			datasheet2: fixUrl(result["DatasheetUrl"]),
+			parameters2: parameters.join("\n"),
+			image: fixUrl(result["PhotoUrl"]),
+			price: result["UnitPrice"],
+			digikey: result.deep_find("DigiKeyProductNumber"),
+			qty: result["QuantityAvailable"],
+			part_number: result["ManufacturerProductNumber"]
+		}
 	end
 
 	def fixUrl url
