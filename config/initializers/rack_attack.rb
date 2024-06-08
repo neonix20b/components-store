@@ -4,7 +4,7 @@ class Rack::Attack
   blocklist_ip("3.224.220.0/16")
 
   throttle("requests by ip", limit: 10, period: 2.seconds) do |req|
-    unless req.path.start_with?('/assets')
+    if !req.path.start_with?('/assets') and !req.path.start_with?('/rails') and !req.path.start_with?('/up')
       Rails.logger.error("Rack::Attack Too many requests from IP: #{req.ip}")
       req.ip
     end
