@@ -91,7 +91,7 @@ gem "spree_gateway"
 gem "spree_i18n"
 
 # only needed for MacOS and Ruby 3.0
-gem 'sassc'
+gem 'sassc', github: 'sass/sassc-ruby', branch: 'master'
 gem "aws-sdk-s3", require: false
 gem 'csv'
 gem 'rack-host-redirect'

@@ -9,12 +9,12 @@
 #
 # In order to initialize a setting do:
 # config.setting_name = 'new value'
-# Spree.config do |config|
-#   # Example:
-#   # Uncomment to stop tracking inventory levels in the application
-#   # config.track_inventory_levels = false
-#   config.always_put_site_name_in_title = false
-# end
+
+Spree.config do |config|
+  # Example:
+  # Uncomment to stop tracking inventory levels in the application
+  config.track_inventory_levels = false
+end
 
 # Configure Spree Dependencies
 #
@@ -30,6 +30,3 @@ end
 # Spree::Api::Dependencies.storefront_cart_serializer = 'MyRailsApp::CartSerializer'
 
 Spree.user_class = "Spree::User"
-# Spree::Frontend::Config[:locale] = :ru
-# Spree::Backend::Config[:locale] = :ru
-# Spree::RuntimeConfig.always_use_translations = true

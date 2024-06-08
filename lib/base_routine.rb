@@ -1,6 +1,6 @@
 class BaseRoutine
 	# t = Spree::Taxon.find(34)
-	MIN_PRICE = 10
+	MIN_PRICE = 5
 	KEYWORDS = ["eval", "board", "kit", "FPGA", "PGA", "DAC", "ADC", "MCU", "PLD", "LDO", "DSP", "CMOS", "COB", "CPLD", "driver", "SoC", "Amplifier", "Logic", "PLL", "IC", "sensor", "PMIC", "Linear", "Interface", "Embedded", "Memory", "MOSFET", "RF"]
 	
 	def self.loadProductsFor taxon: nil, keywords: KEYWORDS, in_threads: 1, pages: (0..200), min_price: MIN_PRICE
@@ -23,33 +23,33 @@ class BaseRoutine
 					@@digikey.searchProducts keyword: keyword, mfr_ids: mfr_ids, offset: page*50 do |h|
 						if !h[:price].blank?
 							last_price = h[:price].to_f
-							if  last_price > min_price
-								part_number = h[:part_number]
-								puts "#{taxon.id}: #{taxon.meta_title} [#{keyword}/#{page}] #{part_number} $#{last_price}"
-								product = findOrCreateProduct part_number: part_number, availability: h[:qty], price: last_price, product_number: h[:digikey], source: "digikey"
-								unless product.nil?
-									if product.description.blank?
-										product.description = "#{part_number} от #{taxon.name}"
-										product.save!
-									end
+							# if  last_price > min_price
+							# 	part_number = h[:part_number]
+							# 	puts "#{taxon.id}: #{taxon.meta_title} [#{keyword}/#{page}] #{part_number} $#{last_price}"
+							# 	product = findOrCreateProduct part_number: part_number, availability: h[:qty], price: last_price, product_number: h[:digikey], source: "digikey"
+							# 	unless product.nil?
+							# 		if product.description.blank?
+							# 			product.description = "#{part_number} от #{taxon.name}"
+							# 			product.save!
+							# 		end
 
-									updateProduct product, h: h
+							# 		updateProduct product, h: h
 
-									if h[:image].blank? and product.property("mouser").nil?
-										h2 = Mouser.searchDataFor part_number: part_number, mfr: taxon.meta_title
-										updateProduct product, h: h2
-									end
+							# 		if h[:image].blank? and product.property("mouser").nil?
+							# 			h2 = Mouser.searchDataFor part_number: part_number, mfr: taxon.meta_title
+							# 			updateProduct product, h: h2
+							# 		end
 
-									product.save!
+							# 		product.save!
 
-									if product.taxons.blank?
-										taxon.products << product
-										taxon.save!
-									end
+							# 		if product.taxons.blank?
+							# 			taxon.products << product
+							# 			taxon.save!
+							# 		end
 
-									# makeDescriptionFor product
-								end
-							end
+							# 		# makeDescriptionFor product
+							# 	end
+							# end
 						end
 					end
 					break if last_price < min_price
