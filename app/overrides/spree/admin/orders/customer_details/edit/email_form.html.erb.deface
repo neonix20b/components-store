@@ -25,10 +25,12 @@
            <%= f.label :body, "Сообщение:" %>
            <%= f.text_area :body, class: 'form-control' %>
          </div>
-         <div class="form-group">
-           <%= f.label :file, "Вложение:" %>
-           <%= f.file_field :file %>
-         </div>
+         <% (1..5).each do |i|%>
+          <div class="form-group">
+            <%= f.label "file_#{i}", "Вложение #{i}:" %>
+            <%= f.file_field "file_#{i}" %>
+          </div>
+         <%end%>
          <%= f.submit "Отправить" %>
        <% end %>
      </div>

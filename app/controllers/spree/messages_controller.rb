@@ -10,9 +10,12 @@ class Spree::MessagesController < Spree::StoreController
         body: params[:body],
         domain: params[:from].split("@").last
       )
-      if params[:file].present?
-        uploaded_io = params[:file]
-        mail.attachments[uploaded_io.original_filename] = uploaded_io.read
+      (1..5).each do |i|
+        f = "file_#{i}".to_sym
+        if params[f].present?
+          uploaded_io = params[f]
+          mail.attachments[uploaded_io.original_filename] = uploaded_io.read
+        end
       end
 
       mail.deliver_now

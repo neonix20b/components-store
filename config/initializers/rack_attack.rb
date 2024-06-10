@@ -3,16 +3,16 @@ class Rack::Attack
   blocklist_ip("23.22.35.0/16")
   blocklist_ip("3.224.220.0/16")
 
-  # throttle("requests by ip", limit: 60, period: 10.seconds) do |req|
-  #   if !req.path.start_with?('/assets') and !req.path.start_with?('/rails') and !req.path.start_with?('/up')
-  #     Rails.logger.error("Rack::Attack Too many requests from IP: #{req.ip}")
-  #     req.ip
-  #   end
-  # end
+  throttle("requests by ip", limit: 5, period: 2.seconds) do |req|
+    if !req.path.start_with?('/assets') and !req.path.start_with?('/rails') and !req.path.start_with?('/up')
+      # Rails.logger.error("Rack::Attack Too many requests from IP: #{req.ip}")
+      req.ip
+    end
+  end
 
   throttle('post requests', limit: 2, period: 4.seconds) do |req|
     if req.post?
-      Rails.logger.error("Rack::Attack Too many POSTS from IP: #{req.ip}")
+      # Rails.logger.error("Rack::Attack Too many POSTS from IP: #{req.ip}")
       req.ip
     end
   end
