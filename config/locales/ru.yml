@@ -1473,7 +1473,7 @@ ru:
     images: Изображения
     implement_eligible_for_return: Implement eligible for return
     implement_requires_manual_intervention: Implement requires manual intervention
-    in_stock: в наличии
+    in_stock: в наличии (удаленный склад)
     inactive: Не активен
     incl: вкл.
     included_in_price: Включено в цену
@@ -1701,7 +1701,7 @@ ru:
     num_orders: Кол-во заказов
     number: Номер
     ok: ОК
-    on_hand: в наличии
+    on_hand: в наличии (on_hand)
     only_active_products_can_be_added_to_cart: Товары в состоянии «Черновик» и «Архив»
       не могут быть добавлены в корзину. Пожалуйста, сделайте товар активным.
     open: Открыто
