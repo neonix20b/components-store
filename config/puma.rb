@@ -22,7 +22,7 @@ if env == "production"
     worker_timeout 15
     worker_shutdown_timeout 8
   else
-    preload_app!
+    workers 0
   end
 elsif env == "development"
   # Specifies the `worker_timeout` threshold that Puma will use to wait before
