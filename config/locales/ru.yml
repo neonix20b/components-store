@@ -853,10 +853,10 @@ ru:
         uid: UID
       order:
         events:
-          approve: одобрен
-          cancel: отменен
-          resend: resend
-          resume: resume
+          approve: одобрить
+          cancel: отменить
+          resend: выслать повторно
+          resume: возобновить
       orders:
         abandoned_checkouts: Покинутые корзины
         all: Все
