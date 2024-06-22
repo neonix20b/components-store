@@ -1,5 +1,3 @@
-require 'ox_store/product_search'
-
 # Configure Spree Preferences
 #
 # Note: Initializing preferences available within the Admin will overwrite any changes that were made through the user interface when you restart.
@@ -17,8 +15,9 @@ Spree.config do |config|
   # Uncomment to stop tracking inventory levels in the application
   config.track_inventory_levels = false
   config.show_products_without_price = true
-  config.searcher_class = OxStore::ProductSearch
 end
+
+Spree.searcher_class = "OxStore::ProductSearch"
 
 # Configure Spree Dependencies
 #

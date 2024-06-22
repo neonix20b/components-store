@@ -1,7 +1,13 @@
 module OxStore
   class ProductSearch < Spree::Core::Search::Base
+    def retrieve_products
+      @products_scope = get_base_scope
+      curr_page = page || 1
 
-    protected
+      @products = @products_scope.includes([:master]).page(curr_page).per(per_page)
+    end
+
+    private
     def get_base_scope
         base_scope = Spree::Product.active
         base_scope = base_scope.in_taxon(taxon) unless taxon.blank?
