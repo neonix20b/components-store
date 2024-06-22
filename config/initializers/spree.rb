@@ -15,7 +15,7 @@ Spree.config do |config|
   # Uncomment to stop tracking inventory levels in the application
   config.track_inventory_levels = false
   config.show_products_without_price = true
-  config.show_zero_stock_products = true
+  config.searcher_class = OxStore::ProductSearch
 end
 
 # Configure Spree Dependencies
