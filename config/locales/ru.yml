@@ -2240,6 +2240,7 @@ ru:
     states_required: Регионы обязательны
     status: Статус
     stock: Управление запасами
+    default_stock_location_name: default
     stock_item_id: Единица хранения
     stock_location: Расположение склада
     stock_location_info: Подробности расположения склада
