@@ -2,7 +2,7 @@ class YandexMarketFeed
 	include Rails.application.routes.url_helpers
 
 	def self.generate
-		puts "Generate Market Feed"
+		puts "Generate Market Feed: #{Time.now}"
 		# return nil if File.exist?("public/market_feed.yml.gz")
 		I18n.locale = :ru
 		store = Spree::Store.default
@@ -53,5 +53,6 @@ class YandexMarketFeed
 		Zlib::GzipWriter.open('public/market_feed.yml.gz') do |gz|
 		  gz.write xml
 		end
+		puts "Complite Market Feed: #{Time.now}"
 	end
 end
