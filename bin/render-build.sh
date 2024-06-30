@@ -5,9 +5,9 @@ set -o errexit
 source_cache_dir="public"
 
 if [[ -d "$XDG_CACHE_HOME/$source_cache_dir" ]]; then
-  cp "$XDG_CACHE_HOME/$source_cache_dir/*.gz" $source_cache_dir
+  cp $XDG_CACHE_HOME/$source_cache_dir/*.gz $source_cache_dir
 else
-  mkdir "$XDG_CACHE_HOME/$source_cache_dir"
+  mkdir $XDG_CACHE_HOME/$source_cache_dir
 fi
 
 bundle install
