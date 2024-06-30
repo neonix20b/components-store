@@ -2,10 +2,10 @@
 # exit on error
 set -o errexit
 
-source_cache_dir="public"
+source_cache_dir="$XDG_CACHE_HOME/rails_public"
 
-if [[ -d "$XDG_CACHE_HOME/$source_cache_dir" ]]; then
-  cp "$XDG_CACHE_HOME/$source_cache_dir/*.gz" $source_cache_dir
+if [[ -d $source_cache_dir ]]; then
+  cp "$source_cache_dir/*.gz" public
 else
   mkdir $source_cache_dir
 fi
@@ -20,6 +20,6 @@ if [ "$1" == "web" ]; then
     bundle exec rake feeds:yandex
     # bundle exec rake feeds:google
 
-    cp $source_cache_dir/*.gz "$XDG_CACHE_HOME/$source_cache_dir"
+    cp public/*.gz $source_cache_dir
   fi
 fi
