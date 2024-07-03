@@ -4,6 +4,10 @@ class Rack::Attack
    blocklist_ip("3.224.220.101") #amazonbot
    blocklist_ip("52.70.240.171")
 
+   Rack::Attack.blocklist('block amazonbot') do |req|
+    req.user_agent.include?('Amazonbot')
+   end
+
   # throttle("requests by ip", limit: 10, period: 2.seconds) do |req|
   #   if !req.path.start_with?('/assets') and !req.path.start_with?('/rails') and !req.path.start_with?('/up')
   #     # Rails.logger.error("Rack::Attack Too many requests from IP: #{req.ip}")
