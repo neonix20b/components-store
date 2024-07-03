@@ -1,7 +1,8 @@
 class Rack::Attack
 #   blocklist_ip("65.108.2.0/16")
-#   blocklist_ip("23.22.35.0/16")
+   blocklist_ip("23.22.35.162")
    blocklist_ip("3.224.220.101") #amazonbot
+   blocklist_ip("52.70.240.171")
 
   # throttle("requests by ip", limit: 10, period: 2.seconds) do |req|
   #   if !req.path.start_with?('/assets') and !req.path.start_with?('/rails') and !req.path.start_with?('/up')
