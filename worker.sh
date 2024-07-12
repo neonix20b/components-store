@@ -14,5 +14,5 @@ do
    # bundle exec rake sitemap:refresh:no_ping
    # bundle exec rake feeds:yandex
    # bundle exec rake feeds:google
-   # YandexTurbo.generate page: 48
+   # YandexTurbo.generate page: 10
 done

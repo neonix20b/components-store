@@ -32,6 +32,7 @@ services:
     buildCommand: "./bin/render-build.sh web"
     preDeployCommand: "bundle exec rails db:migrate"
     startCommand: "bundle exec rails server"
+    numInstances: 2
     healthCheckPath: /up
     domains:
      - 'components.oxteam.me'
