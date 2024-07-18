@@ -21,6 +21,9 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   Spree::Core::Engine.routes.prepend do
+    namespace :admin do
+      resources :emails
+    end
     resources :messages do
       collection do
         post :email

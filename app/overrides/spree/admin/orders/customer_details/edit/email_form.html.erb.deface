@@ -1,5 +1,18 @@
 <!-- insert_after "br" -->
- <div id="select-customer" class="card mb-3" data-hook="">
+<%if @order.emails.count > 0%>
+  <div class="table-responsive border rounded bg-white">
+    <table class="table border rounded">
+        <% @order.emails.each do |email| %>
+          <tr>
+            <td class="small font-weight-bold"><%= email.created_at.strftime("%d.%m.%Y %H:%M UTC") %></td>
+            <td><%= link_to email.subject, spree.admin_email_path(email) %></td>
+            <td><%= email.body.truncate(400) %></td>
+          </tr>
+        <%end%>
+    </table>
+  </div>
+<%end%>
+ <div id="send-customer-email" class="card mb-3" data-hook="">
      <div class="card-header">
        <h5 class="card-title mb-0 h6">
          Отправить письмо
@@ -7,6 +20,7 @@
      </div>
      <div class="card-body" id="customer-email-field">
        <%= form_with url: spree.email_messages_path, method: :post do |f| %>
+         <%= f.hidden_field :order_id, value: @order.id %>
          <p>Справочно: <b><%= current_store.customer_support_email %></b></p>
          <div class="form-group">
            <%= f.label :from, "От:" %>
