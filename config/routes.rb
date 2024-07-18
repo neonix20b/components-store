@@ -27,6 +27,7 @@ Rails.application.routes.draw do
     resources :messages do
       collection do
         post :email
+        post :router
       end
     end
   end

@@ -26,6 +26,13 @@ class Spree::MessagesController < Spree::StoreController
     end
   end
 
+  def router
+    if params[:key] == "123"
+      
+    end
+    redirect_to root_path
+  end
+
   def create
     spree_current_user.messages.destroy_all
     @sys ||= Spree::Store.default.configs.find_by(name: "ai").payload["sys_messages"]
