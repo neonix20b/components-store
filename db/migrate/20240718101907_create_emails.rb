@@ -5,7 +5,7 @@ class CreateEmails < ActiveRecord::Migration[7.1]
       t.string :subject
       t.references :spree_order, null: false, foreign_key: true
       t.integer :direction, default: 0
-      t.bool :read, default: false
+      t.boolean :read, default: false
       t.string :from
       t.string :to
 
