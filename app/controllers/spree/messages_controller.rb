@@ -34,7 +34,7 @@ class Spree::MessagesController < Spree::StoreController
     else
       str += "\nNO"
     end
-    render :text => str
+    render :plain => str
   end
 
   def create
