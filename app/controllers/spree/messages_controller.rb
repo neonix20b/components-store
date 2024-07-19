@@ -28,13 +28,18 @@ class Spree::MessagesController < Spree::StoreController
   end
 
   def router
-    str = params.to_yaml.to_s
+    puts params.inspect
     if params[:key] == ENV["MAILGUN_KEY"]
-      str += "\nOKOKOK"
-    else
-      str += "\nNO"
+      from = params[:sender]
+      subject = params[:subject]
+      body = params["body-plain"]
+      order = Spree::Order.find_by_number(subject[/\b(\w\d{8,})\b/,1])
+      order = Spree::Order.find_by_number(body[/\b(\w\d{8,})\b/,1]) if order.nil?
+      unless order.nil?
+        order.emails.create!(from: from, to: params[:recipient], subject: subject, body: body, direction: :in)
+      end
     end
-    render :plain => str
+    render plain: 'ok'
   end
 
   def create
