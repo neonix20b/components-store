@@ -27,10 +27,13 @@ class Spree::MessagesController < Spree::StoreController
   end
 
   def router
-    if params[:key] == "123"
-      
+    str = params.to_yaml.to_s
+    if params[:key] == ENV["MAILGUN_KEY"]
+      str += "\nOKOKOK"
+    else
+      str += "\nNO"
     end
-    redirect_to root_path
+    render :text => str
   end
 
   def create
