@@ -1,5 +1,6 @@
 class Spree::MessagesController < Spree::StoreController
   #load_and_authorize_resource class: Spree::Address
+  skip_before_action :verify_authenticity_token, only: :router
   
   def email
     if current_spree_user.admin?
