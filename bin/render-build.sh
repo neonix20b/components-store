@@ -13,6 +13,7 @@ bundle exec rails assets:precompile
 bundle exec rails assets:clean
 
 if [ "$1" == "web" ]; then
+  rake webhooks RAILS_ENV=production
   if ! test -f public/sitemap.xml.gz; then
     bundle exec rake sitemap:refresh:no_ping
     bundle exec rake feeds:yandex
