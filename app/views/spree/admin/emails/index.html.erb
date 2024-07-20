@@ -42,37 +42,7 @@
 <% end %>
 
 <% if @emails.any? %>
-<div class="table-responsive border rounded bg-white">
-  <table class="table" id="emailsTable">
-    <thead class="text-muted">
-      <th scope="col">Тема</th>
-      <th scope="col">Письмо</th>
-      <th scope="col">Заказ</th>
-      <th scope="col" class="text-center"></th>
-    </thead>
-    <tbody>
-      <% @emails.each do |email| %>
-        <tr class="<%= email.read? ? '' :'font-weight-bold'%> <%= email.in? ? 'bg-light' : ''%>">
-          <td>
-            <%= link_to email.subject, spree.admin_email_path(email) %>
-          </td>
-          <td>
-            <%= email.body.truncate(400) %>
-          </td>
-          <td>
-            <%= link_to email.order.number, admin_order_customer_path(email.order)%>
-            <div class="small"><%= email.created_at.strftime("%H:%M %Z %d.%m.%Y") %></div>
-          </td>
-          <td class="actions" data-hook="admin_emails_index_row_actions">
-             <span class="d-flex justify-content-end">             
-             <%= link_to_delete email, no_text: true, url: spree.admin_email_path(email) if can?(:destroy, email) %>
-            </span>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+<%= render 'table', emails: @emails %>
 <%= render 'spree/admin/shared/index_table_options', collection: @emails, simple: true %>
 <% else %>
   <div class="text-center no-objects-found m-5">

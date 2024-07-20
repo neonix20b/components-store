@@ -1,16 +1,6 @@
 <!-- insert_after "br" -->
 <%if @order.emails.count > 0%>
-  <div class="table-responsive border rounded bg-white">
-    <table class="table border rounded">
-        <% @order.emails.each do |email| %>
-          <tr>
-            <td class="small font-weight-bold"><%= email.created_at.strftime("%d.%m.%Y %H:%M UTC") %></td>
-            <td><%= link_to email.subject, spree.admin_email_path(email) %></td>
-            <td><%= email.body.truncate(400) %></td>
-          </tr>
-        <%end%>
-    </table>
-  </div>
+  <%= render 'spree/admin/emails/table', emails: @order.emails %>
 <%end%>
  <div id="send-customer-email" class="card mb-3" data-hook="">
      <div class="card-header">

@@ -1,1 +1,63 @@
-<%= @email.body %>
+<div class="row">
+    <div class="card mb-4 with-sidebar col-12 col-lg-9" id="content" data-hook>
+        <div class="card-header">
+            <h5 class="card-title mb-0 h6"><%= @email.subject %></h5>
+        </div>
+        <div class="card-body">
+            <%= markdown @email.body %>
+        </div>
+        
+    </div>
+
+    <aside id="sidebar" class="main-right-sidebar px-0 pl-lg-2 col-12 col-lg-3" data-hook>
+      <div class="card mb-3" id="email_tab_summary">
+        <div class="card-header">
+            <h3 class="card-title mb-0 h6">Сводка</h3>
+            <small>id: <%= @email.id %></small>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center text-wrap">
+                <small><b>Тема:</b> <%= @email.subject %></small>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <small>Направление:</small>
+                <span class="state badge badge-pill badge-<%=@email.in? ? 'pending' : 'complete'%> badge-pill text-capitalize" id="email_direction">
+                    <%= @email.direction %>
+                </span>
+            </li>
+
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <small data-hook="admin_email_tab_from">От: </small>
+                <span class="state small" id="email_from">
+                    <%= @email.from %>
+                </span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <small data-hook="admin_email_tab_to">Кому: </small>
+                <span class="state small" id="email_to">
+                    <%= @email.to %>
+                </span>
+            </li>
+
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <small data-hook="admin_email_tab_created_at">Время: </small>
+                <span class="state small" id="email_created_at">
+                    <%= @email.created_at.strftime("%H:%M:%S %Z %d.%m.%Y") %>
+                </span>
+            </li>
+
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <small data-hook="admin_email_tab_order">Заказ: </small>
+                <span class="state small" id="email_order">
+                    <%= link_to @email.order.number, admin_order_customer_path(@email.order)%>
+                </span>
+            </li>
+        </ul>
+      </div>
+  </aside>
+</div>
+
+<% if @email.order.emails.any? %>
+    <h3>Цепочка писем по заказу</h3>
+    <%= render 'table', emails: @email.order.emails %>
+<%end%>
