@@ -32,6 +32,5 @@ Rails.application.routes.draw do
     end
   end
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  telegram_webhook Telegram::WebhookController, :default
 end
