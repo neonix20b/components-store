@@ -103,3 +103,4 @@ gem "ruby-openai"
 gem 'redcarpet'
 gem 'spree_image_list_cms_sections', github: 'neonix20b/spree_image_list_cms_sections'
 gem 'rack-attack'
+gem 'telegram-bot'

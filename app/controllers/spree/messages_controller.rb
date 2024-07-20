@@ -32,6 +32,11 @@ class Spree::MessagesController < Spree::StoreController
       from = params[:sender]
       subject = params[:subject]
       body = params["body-plain"]
+
+      Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: from)
+      Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: subject)
+      Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: body)
+
       order = Spree::Order.find_by_number(subject[/\b(\w\d{8,})\b/,1])
       order = Spree::Order.find_by_number(body[/\b(\w\d{8,})\b/,1]) if order.nil?
       unless order.nil?
