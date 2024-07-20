@@ -5,6 +5,7 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
       @bot_name ||= Telegram.bot.get_me["result"]["username"]
       order_number = text[/\b(\w\d{8,})\b/,1]
       if order_number.present?
+        config = get_config
         config.payload["order"] = order_number
 		    config.save!
       end
@@ -20,12 +21,19 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
   end
 
   def order!(word = nil, *other_words)
-    order = Spree::Order.find_by_number(config.payload["order"])
-    respond_with :message, text: order.to_yaml
+    order = Spree::Order.find_by_number(get_config.payload["order"])
+    respond_with :message, text: "<pre><code class='language-json'>#{JSON.pretty_generate(JSON.parse(order.to_json))}</code></pre>", parse_mode: :HTML
+  end
+
+  def reset!(word = nil, *other_words)
+    config = get_config
+    config.payload["order"] = nil
+    config.save!
+    respond_with :message, text: "Давайте начнем с чистого листа"
   end
 
   private
-  def config
+  def get_config
     Spree::Store.default.configs.find_by(name: "telegram")
   end
 end
