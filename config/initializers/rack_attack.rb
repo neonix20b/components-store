@@ -5,7 +5,7 @@ class Rack::Attack
    blocklist_ip("52.70.240.171")
 
    Rack::Attack.blocklist('block amazonbot') do |req|
-    req.user_agent.include?('Amazonbot')
+    req.user_agent.include?('Amazonbot') if !req.path.start_with?('/telegram')
    end
 
   # throttle("requests by ip", limit: 10, period: 2.seconds) do |req|
