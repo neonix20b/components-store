@@ -1,5 +1,5 @@
 <% content_for :page_title do %>
-  <%= Spree.t('admin.navigation.emails') %>
+  Письма
 <% end %>
 
 <% content_for :page_actions do %>
@@ -14,7 +14,7 @@
 
         <div class="col-12 col-lg-4">
           <div class="form-group">
-            <%= f.label :subject_cont, "Тема" %>
+            <%= f.label :subject_cont, "Теме" %>
             <%= f.text_field :subject_cont, size: 15, class: "form-control js-quick-search-target js-filterable" %>
           </div>
         </div>
@@ -32,19 +32,6 @@
           </div>
         </div>
 
-        <div class="col-12 col-lg-4">
-          <div class="form-group">
-            <%#= f.label :read_eq, "Прочитано" %>
-            <%#= f.text_field :read_eq, spree_humanize_dropdown_values('Email', { const: 'EMAIL_READ', paramterize_values: true }), { include_blank: true }, class: 'select2-clear js-filterable' %>
-          </div>
-        </div>
-
-        <div class="col-12 col-lg-4">
-         <div class="form-group">
-           <%#= label_tag :q_locale_eq, Spree.t(:language) %>
-           <%#= f.select :locale_eq, all_locales_options, { include_blank: true }, class: 'select2-clear js-filterable' %>
-         </div>
-        </div>
       </div>
 
       <div data-hook="admin_emails_index_search_buttons" class="form-actions">
@@ -58,14 +45,14 @@
 <div class="table-responsive border rounded bg-white">
   <table class="table" id="emailsTable">
     <thead class="text-muted">
-      <th scope="col">Тема<%#= Spree.t(:name) %></th>
-      <th scope="col">Письмо<%#= Spree.t('location') %></th>
+      <th scope="col">Тема</th>
+      <th scope="col">Письмо</th>
       <th scope="col">Заказ</th>
       <th scope="col" class="text-center"></th>
     </thead>
     <tbody>
       <% @emails.each do |email| %>
-        <tr class="<%= email.read? ? '' :'font-weight-bold'%>">
+        <tr class="<%= email.read? ? '' :'font-weight-bold'%> <%= email.in? ? 'bg-light' : ''%>">
           <td>
             <%= link_to email.subject, spree.admin_email_path(email) %>
           </td>
@@ -77,9 +64,7 @@
             <div class="small"><%= email.created_at.strftime("%H:%M %Z %d.%m.%Y") %></div>
           </td>
           <td class="actions" data-hook="admin_emails_index_row_actions">
-             <span class="d-flex justify-content-end">
-             <%#= link_to_edit(email, no_text: true) %>
-             
+             <span class="d-flex justify-content-end">             
              <%= link_to_delete email, no_text: true, url: spree.admin_email_path(email) if can?(:destroy, email) %>
             </span>
           </td>
