@@ -1,0 +1,75 @@
+<% content_for :page_title do %>
+  <%= Spree.t('admin.navigation.emails') %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%#= button_link_to Spree.t('admin.navigation.add_new_email'), new_object_url, { class: "btn-primary", icon: 'add.svg', id: 'new_email' } %>
+<% end if can?(:create, Email) %>
+
+<% content_for :table_filter do %>
+  <div data-hook="admin_emails_sidebar">
+    <%= search_form_for [:admin, @search] do |f| %>
+      <%- locals = {f: f} %>
+      <div class="row">
+
+        <div class="col-12 col-lg-4">
+          <div class="form-group">
+            <%= f.label :name_cont, Spree.t('name') %>
+            <%= f.text_field :name_cont, size: 15, class: "form-control js-quick-search-target js-filterable" %>
+          </div>
+        </div>
+        <div class="col-12 col-lg-4">
+          <div class="form-group">
+            <%#= label_tag :q_location_eq, Spree.t(:location) %><%#= f.select :location_eq, spree_humanize_dropdown_values('Spree::Email', { const: 'email_LOCATIONS', paramterize_values: true }), { include_blank: true }, class: 'select2-clear js-filterable' %>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+         <div class="form-group">
+           <%#= label_tag :q_locale_eq, Spree.t(:language) %>
+           <%#= f.select :locale_eq, all_locales_options, { include_blank: true }, class: 'select2-clear js-filterable' %>
+         </div>
+        </div>
+      </div>
+
+      <div data-hook="admin_emails_index_search_buttons" class="form-actions">
+        <%= button Spree.t(:search), 'search.svg' %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<% if @emails.any? %>
+<div class="table-responsive border rounded bg-white">
+  <table class="table" id="emailsTable">
+    <thead class="text-muted">
+      <th scope="col">Тема<%#= Spree.t(:name) %></th>
+      <th scope="col">Письмо<%#= Spree.t('location') %></th>
+      <th scope="col" class="text-center"></th>
+    </thead>
+    <tbody>
+      <% @emails.each do |email| %>
+        <tr>
+          <td>
+            <%= email.subject %>
+          </td>
+          <td>
+            <%= email.body.truncate(400) %>
+          </td>
+          <td class="actions" data-hook="admin_emails_index_row_actions">
+             <span class="d-flex justify-content-end">
+             <%#= link_to_edit(email, no_text: true) %>
+             <%= link_to_delete email, no_text: true, url: spree.admin_email_path(email) if can?(:destroy, email) %>
+            </span>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<%= render 'spree/admin/shared/index_table_options', collection: @emails, simple: true %>
+<% else %>
+  <div class="text-center no-objects-found m-5">
+    <%= Spree.t('admin.navigation.you_have_no_emails') %>
+  </div>
+<% end %>

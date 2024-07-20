@@ -28,7 +28,6 @@ class Spree::MessagesController < Spree::StoreController
   end
 
   def router
-    puts params.inspect
     if params[:key] == ENV["MAILGUN_KEY"]
       from = params[:sender]
       subject = params[:subject]
