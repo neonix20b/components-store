@@ -1,5 +1,4 @@
 class Spree::Admin::EmailsController < Spree::Admin::ResourceController
-  def index; end
 
   def show
     @email.read = true
@@ -12,13 +11,12 @@ class Spree::Admin::EmailsController < Spree::Admin::ResourceController
   end
 
   def scope
-    Email.all
-    #current_store.emails
+    current_store.emails
   end
 
-  def find_resource
-    scope.find(params[:id])
-  end
+  # def find_resource
+  #   scope.find(params[:id])
+  # end
 
   def collection
     return @collection if @collection.present?
