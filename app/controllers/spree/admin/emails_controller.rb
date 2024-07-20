@@ -1,6 +1,11 @@
 class Spree::Admin::EmailsController < Spree::Admin::ResourceController
   def index; end
 
+  def show
+    @email.read = true
+    @email.save
+  end
+
   private
   def model_class
     Email

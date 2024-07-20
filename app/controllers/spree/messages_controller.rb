@@ -20,7 +20,7 @@ class Spree::MessagesController < Spree::StoreController
       end
 
       order = Spree::Order.find(params[:order_id])
-      order.emails.create!(from: params[:from], to: params[:email], subject: params[:subject], body: params[:body], direction: :out)
+      order.emails.create!(from: params[:from], to: params[:email], subject: params[:subject], body: params[:body], read: true, direction: :out)
 
       mail.deliver_now
       redirect_back(fallback_location: root_path, notice: "Сообщение отправлено #{mail.message_id}")

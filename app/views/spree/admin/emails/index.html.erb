@@ -60,20 +60,26 @@
     <thead class="text-muted">
       <th scope="col">Тема<%#= Spree.t(:name) %></th>
       <th scope="col">Письмо<%#= Spree.t('location') %></th>
+      <th scope="col">Заказ</th>
       <th scope="col" class="text-center"></th>
     </thead>
     <tbody>
       <% @emails.each do |email| %>
-        <tr>
+        <tr class="<%= email.read? ? '' :'font-weight-bold'%>">
           <td>
-            <%= email.subject %>
+            <%= link_to email.subject, spree.admin_email_path(email) %>
           </td>
           <td>
             <%= email.body.truncate(400) %>
           </td>
+          <td>
+            <%= link_to email.order.number, admin_order_customer_path(email.order)%>
+            <div class="small"><%= email.created_at.strftime("%H:%M %Z %d.%m.%Y") %></div>
+          </td>
           <td class="actions" data-hook="admin_emails_index_row_actions">
              <span class="d-flex justify-content-end">
              <%#= link_to_edit(email, no_text: true) %>
+             
              <%= link_to_delete email, no_text: true, url: spree.admin_email_path(email) if can?(:destroy, email) %>
             </span>
           </td>
