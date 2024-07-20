@@ -14,13 +14,28 @@
 
         <div class="col-12 col-lg-4">
           <div class="form-group">
-            <%= f.label :name_cont, Spree.t('name') %>
-            <%= f.text_field :name_cont, size: 15, class: "form-control js-quick-search-target js-filterable" %>
+            <%= f.label :subject_cont, "Тема" %>
+            <%= f.text_field :subject_cont, size: 15, class: "form-control js-quick-search-target js-filterable" %>
           </div>
         </div>
         <div class="col-12 col-lg-4">
           <div class="form-group">
-            <%#= label_tag :q_location_eq, Spree.t(:location) %><%#= f.select :location_eq, spree_humanize_dropdown_values('Spree::Email', { const: 'email_LOCATIONS', paramterize_values: true }), { include_blank: true }, class: 'select2-clear js-filterable' %>
+            <%= f.label :from_eq, "От кого" %>
+            <%= f.select :from_eq, Email.unscoped.select(:from).order(:from).distinct.pluck(:from), { include_blank: true }, class: "select2-clear js-filterable" %>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+          <div class="form-group">
+            <%= f.label :body_eq, "Тело письма" %>
+            <%= f.text_field :body_cont, size: 15, class: "form-control js-quick-search-target js-filterable" %>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+          <div class="form-group">
+            <%#= f.label :read_eq, "Прочитано" %>
+            <%#= f.text_field :read_eq, spree_humanize_dropdown_values('Email', { const: 'EMAIL_READ', paramterize_values: true }), { include_blank: true }, class: 'select2-clear js-filterable' %>
           </div>
         </div>
 
