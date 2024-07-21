@@ -1,10 +1,11 @@
 <div class="row">
-    <div class="card mb-4 with-sidebar col-12 col-lg-9" id="content" data-hook>
+    <div class="card mb-0 with-sidebar col-12 col-lg-9" id="content" data-hook>
         <div class="card-header">
             <h5 class="card-title mb-0 h6"><%= @email.subject %></h5>
         </div>
         <div class="card-body">
             <%= markdown @email.body %>
+            <%= render 'form', order: @email.order, reply: @email.in? ? @email : nil %>
         </div>
     </div>
 

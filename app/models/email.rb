@@ -9,4 +9,17 @@ class Email < Spree::Base
   belongs_to :order, class_name: 'Spree::Order', foreign_key: :spree_order_id
   belongs_to :store
   enum :direction, { out: 0, in: 10 }
+
+  def body_responce
+    lines = self.body.split("\n")
+    lines.each do |l| 
+      l.strip!
+      if l.start_with?(">")
+        l.prepend(">")
+      else
+        l.prepend("> ")
+      end
+    end
+    lines.join("\n")
+  end
 end

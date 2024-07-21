@@ -22,7 +22,11 @@ class Telegram::WebhookController < Telegram::Bot::UpdatesController
 
   def order!(word = nil, *other_words)
     order = Spree::Order.find_by_number(get_config.payload["order"])
-    respond_with :message, text: "<pre><code class='language-json'>#{JSON.pretty_generate(JSON.parse(order.to_json))}</code></pre>", parse_mode: :HTML
+    if order.nil?
+      respond_with :message, text: "Нет активного заказа"
+    else
+      respond_with :message, text: "<pre><code class='language-json'>#{JSON.pretty_generate(JSON.parse(order.to_json))}</code></pre>", parse_mode: :HTML
+    end
   end
 
   def reset!(word = nil, *other_words)

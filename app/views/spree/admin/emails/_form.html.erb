@@ -1,0 +1,51 @@
+<div id="accordion_email_form">
+ <div id="send-customer-email" class="card" data-hook="">
+     <div class="card-header" id="email-form-headining">
+       <h5 class="card-title mb-0 h6">
+         <button class="btn btn-link" data-toggle="collapse" data-target="#customer-email-field" aria-expanded="true" aria-controls="customer-email-field">
+          <%if reply.present?%>
+            Ответить на письмо
+          <%else%>
+            Отправить письмо
+          <%end%>
+        </button>
+       </h5>
+     </div>
+     <div id="customer-email-field" class="collapse hide" aria-labelledby="email-form-headining" data-parent="#accordion_email_form">
+        <div class="card-body">
+        <%= form_with url: spree.email_messages_path, method: :post do |f| %>
+            <%= f.hidden_field :order_id, value: order.id %>
+            <p>Справочно: <b><%= current_store.customer_support_email %></b></p>
+            <div class="form-group">
+                <%= f.label :from, "От:" %>
+                <%= f.email_field :from, value: "sales@#{current_store.url}", class: 'form-control' %>
+            </div>
+            <%#= f.hidden_field :from, value: current_store.customer_support_email %>
+            <div class="form-group">
+                <%= f.label :email, "Кому: #{reply.present? ? reply.from : ""}" %>
+                <%= f.email_field :email, value: order.email, class: 'form-control' %>
+            </div>
+            <div class="form-group">
+                <%= f.label :subject, "Тема:" %>
+                <%if reply.present?%>
+                    <%= f.text_field :subject, value: "Re: #{reply.subject}", class: 'form-control' %>
+                <%else%>
+                    <%= f.text_field :subject, value: "#{order.number}: уточнение по заказу", class: 'form-control' %>
+                <%end%>
+            </div>
+            <div class="form-group">
+                <%= f.label :body, "Сообщение:" %>
+                <%= f.text_area :body, class: 'form-control', rows: 10, value: reply.present? ? "Добрый день!\n\n#{reply.body_responce}" : "" %>
+            </div>
+            <% (1..5).each do |i|%>
+                <div class="form-group">
+                    <%= f.label "file_#{i}", "Вложение #{i}:" %>
+                    <%= f.file_field "file_#{i}" %>
+                </div>
+            <%end%>
+            <%= f.submit "Отправить", class: 'btn btn-warning' %>
+        <% end %>
+        </div>
+     </div>
+ </div>
+</div>

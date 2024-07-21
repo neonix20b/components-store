@@ -2,40 +2,4 @@
 <%if @order.emails.count > 0%>
   <%= render 'spree/admin/emails/table', emails: @order.emails %>
 <%end%>
- <div id="send-customer-email" class="card mb-3" data-hook="">
-     <div class="card-header">
-       <h5 class="card-title mb-0 h6">
-         Отправить письмо
-       </h5>
-     </div>
-     <div class="card-body" id="customer-email-field">
-       <%= form_with url: spree.email_messages_path, method: :post do |f| %>
-         <%= f.hidden_field :order_id, value: @order.id %>
-         <p>Справочно: <b><%= current_store.customer_support_email %></b></p>
-         <div class="form-group">
-           <%= f.label :from, "От:" %>
-           <%= f.email_field :from, value: "sales@#{current_store.url}", class: 'form-control' %>
-         </div>
-         <%#= f.hidden_field :from, value: current_store.customer_support_email %>
-         <div class="form-group">
-           <%= f.label :email, "Кому:" %>
-           <%= f.email_field :email, value: @order.email, class: 'form-control' %>
-         </div>
-         <div class="form-group">
-           <%= f.label :subject, "Тема:" %>
-           <%= f.text_field :subject, value: "#{@order.number}: уточнение по заказу", class: 'form-control' %>
-         </div>
-         <div class="form-group">
-           <%= f.label :body, "Сообщение:" %>
-           <%= f.text_area :body, class: 'form-control' %>
-         </div>
-         <% (1..5).each do |i|%>
-          <div class="form-group">
-            <%= f.label "file_#{i}", "Вложение #{i}:" %>
-            <%= f.file_field "file_#{i}" %>
-          </div>
-         <%end%>
-         <%= f.submit "Отправить" %>
-       <% end %>
-     </div>
- </div>
+<%= render 'spree/admin/emails/form', order: @order %>

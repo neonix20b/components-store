@@ -8,7 +8,7 @@
     </thead>
     <tbody>
       <% emails.each do |email| %>
-        <tr class="<%= email.read? ? '' :'font-weight-bold'%> <%= email.in? ? 'bg-light' : ''%>">
+        <tr class="<%= @email.try(:id) == email.id ? 'table-success' : ''%> <%= email.read? ? '' :'font-weight-bold'%> <%= email.in? ? 'bg-light' : ''%>">
           <td>
             <%= link_to email.subject, spree.admin_email_path(email) %>
           </td>
