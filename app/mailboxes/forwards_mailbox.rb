@@ -13,9 +13,9 @@ class ForwardsMailbox < ApplicationMailbox
     order = Spree::Order.find_by_number(subject[/\b(\w\d{8,})\b/,1])
     order = Spree::Order.find_by_number(body[/\b(\w\d{8,})\b/,1]) if order.nil?
     unless order.nil?
-      config = Spree::Store.default.configs.find_by(name: "telegram")
-      config.payload["order"] = order.number
-      config.save!
+      # config = Spree::Store.default.configs.find_by(name: "telegram")
+      # config.payload["order"] = order.number
+      # config.save!
       m = order.emails.create!(from: from, to: params[:recipient], subject: subject, body: body, direction: :in)
       if mail.attachments.present?
         mail.attachments.each do |attachment|
