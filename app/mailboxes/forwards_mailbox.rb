@@ -5,7 +5,8 @@ class ForwardsMailbox < ApplicationMailbox
     from = mail.recipients.first
     to = mail.to.first
     subject = mail.subject
-    body = mail.body.decoded
+    charset = mail.text_part.content_type_parameters['charset']
+    body = mail.text_part.body.decoded.force_encoding(charset).encode('UTF-8')
 
     # Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: from)
     # Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: subject)
