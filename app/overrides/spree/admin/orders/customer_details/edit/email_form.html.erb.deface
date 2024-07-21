@@ -2,4 +2,4 @@
 <%if @order.emails.count > 0%>
   <%= render 'spree/admin/emails/table', emails: @order.emails %>
 <%end%>
-<%= render 'spree/admin/emails/form', order: @order %>
+<%= render 'spree/admin/emails/form', order: @order, reply: nil %>
