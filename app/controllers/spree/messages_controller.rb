@@ -31,14 +31,15 @@ class Spree::MessagesController < Spree::StoreController
   end
 
   def router
-    if params[:key] == ENV["MAILGUN_KEY"]
+    if params[:key] == ENV["MAILGUN_KEY"] and params["body-mime"].present?
       puts params.inspect
       mail = Mail.new(params["body-mime"])
       from = mail.from.first
       to = mail.recipients.first
       subject = mail.subject
-      charset = mail.text_part.content_type_parameters['charset']
-      body = mail.text_part.body.decoded.force_encoding(charset).encode('UTF-8')
+      valid_part = (email.text_part || email.html_part || email)
+      charset = valid_part.content_type_parameters['charset']
+      body = valid_part.body.decoded.force_encoding(charset).encode('UTF-8')
 
       # from = params[:sender]
       # subject = params[:subject]
