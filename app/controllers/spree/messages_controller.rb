@@ -11,16 +11,19 @@ class Spree::MessagesController < Spree::StoreController
         body: params[:body],
         domain: params[:from].split("@").last
       )
+
+      order = Spree::Order.find(params[:order_id])
+      m = order.emails.create!(from: params[:from], to: params[:email], subject: params[:subject], body: params[:body], read: true, direction: :out)
+      
       (1..5).each do |i|
         f = "file_#{i}".to_sym
         if params[f].present?
           uploaded_io = params[f]
           mail.attachments[uploaded_io.original_filename] = uploaded_io.read
+          uploaded_io.rewind
+          m.files.attach(uploaded_io)
         end
       end
-
-      order = Spree::Order.find(params[:order_id])
-      order.emails.create!(from: params[:from], to: params[:email], subject: params[:subject], body: params[:body], read: true, direction: :out)
 
       mail.deliver_now
       redirect_back(fallback_location: root_path, notice: "Сообщение отправлено #{mail.message_id}")
@@ -43,7 +46,11 @@ class Spree::MessagesController < Spree::StoreController
         config = Spree::Store.default.configs.find_by(name: "telegram")
         config.payload["order"] = order.number
 		    config.save!
-        order.emails.create!(from: from, to: params[:recipient], subject: subject, body: body, direction: :in)
+        m = order.emails.create!(from: from, to: params[:recipient], subject: subject, body: body, direction: :in)
+        count = params["Attachment-count"]
+        (1..count.to_i).each do |i|
+          m.files.attach(params["Attachment-#{i}"])
+        end
       end
     end
     render plain: 'ok'

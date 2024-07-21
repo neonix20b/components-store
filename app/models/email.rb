@@ -8,6 +8,7 @@ class Email < Spree::Base
 
   belongs_to :order, class_name: 'Spree::Order', foreign_key: :spree_order_id
   belongs_to :store
+  has_many_attached :files
   enum :direction, { out: 0, in: 10 }
 
   def body_responce

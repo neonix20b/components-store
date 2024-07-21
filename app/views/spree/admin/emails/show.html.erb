@@ -52,6 +52,15 @@
                     <%= link_to @email.order.number, admin_order_customer_path(@email.order)%>
                 </span>
             </li>
+
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <small data-hook="admin_email_tab_order">Вложения: </small>
+                <%@email.files.each do |file|%>
+                    <div class="state small" id="email_attach_#{file.id}">
+                        <%= link_to file.blob.filename, main_app.rails_blob_url(file, disposition: "attachment")%>
+                    </div>
+                <%end%>
+            </li>
         </ul>
       </div>
   </aside>
