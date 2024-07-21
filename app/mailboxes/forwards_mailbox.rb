@@ -2,8 +2,8 @@ class ForwardsMailbox < ApplicationMailbox
   def process
     puts "processing email: #{mail.inspect}"
     # puts params.inspect
-    from = mail.recipients.first
-    to = mail.to.first
+    from = mail.from.first
+    to = mail.recipients.first
     subject = mail.subject
     charset = mail.text_part.content_type_parameters['charset']
     body = mail.text_part.body.decoded.force_encoding(charset).encode('UTF-8')
