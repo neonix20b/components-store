@@ -2,7 +2,8 @@ class ForwardsMailbox < ApplicationMailbox
   def process
     puts "processing email: #{mail.inspect}"
     # puts params.inspect
-    from = mail.from.first
+    from = mail.recipients.first
+    to = mail.to.first
     subject = mail.subject
     body = mail.body.decoded
 
@@ -16,7 +17,7 @@ class ForwardsMailbox < ApplicationMailbox
       # config = Spree::Store.default.configs.find_by(name: "telegram")
       # config.payload["order"] = order.number
       # config.save!
-      m = order.emails.create!(from: from, subject: subject, body: body, direction: :in)
+      m = order.emails.create!(from: from, to: to, subject: subject, body: body, direction: :in)
       if mail.attachments.present?
         mail.attachments.each do |attachment|
           # io = URI.open(url, http_basic_authentication: ["api", ENV["MAILGUN_KEY"]])
