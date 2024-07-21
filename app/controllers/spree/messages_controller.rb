@@ -32,13 +32,14 @@ class Spree::MessagesController < Spree::StoreController
 
   def router
     if params[:key] == ENV["MAILGUN_KEY"]
+      puts params.inspect
       from = params[:sender]
       subject = params[:subject]
       body = params["body-plain"]
 
       Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: from)
       Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: subject)
-      Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: body)
+      Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: params["stripped-text"])
 
       order = Spree::Order.find_by_number(subject[/\b(\w\d{8,})\b/,1])
       order = Spree::Order.find_by_number(body[/\b(\w\d{8,})\b/,1]) if order.nil?
@@ -47,9 +48,9 @@ class Spree::MessagesController < Spree::StoreController
         config.payload["order"] = order.number
 		    config.save!
         m = order.emails.create!(from: from, to: params[:recipient], subject: subject, body: body, direction: :in)
-        count = params["Attachment-count"]
-        (1..count.to_i).each do |i|
-          m.files.attach(params["Attachment-#{i}"])
+        params["attachments"].each do |i|
+          puts i
+          m.files.attach(i)
         end
       end
     end
