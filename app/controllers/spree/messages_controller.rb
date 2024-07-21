@@ -48,9 +48,10 @@ class Spree::MessagesController < Spree::StoreController
         config.payload["order"] = order.number
 		    config.save!
         m = order.emails.create!(from: from, to: params[:recipient], subject: subject, body: body, direction: :in)
-        params["attachments"].each do |i|
-          puts i
-          m.files.attach(i)
+        if params["attachments"].present?
+          JSON.parse(params["attachments"]).each do |f|
+            m.files.attach(io: open(f["url"]), filename: f["name"])
+          end
         end
       end
     end
