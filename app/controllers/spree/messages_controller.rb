@@ -50,7 +50,8 @@ class Spree::MessagesController < Spree::StoreController
         m = order.emails.create!(from: from, to: params[:recipient], subject: subject, body: body, direction: :in)
         if params["attachments"].present?
           JSON.parse(params["attachments"]).each do |f|
-            m.files.attach(io: open(f["url"]), filename: f["name"])
+            # io = URI.open(url, http_basic_authentication: ["api", ENV["MAILGUN_KEY"]])
+            # m.files.attach(io: io, filename: f["name"])
           end
         end
       end
