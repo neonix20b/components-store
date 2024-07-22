@@ -37,7 +37,7 @@ class Spree::MessagesController < Spree::StoreController
       from = mail.from.first
       to = mail.recipients.first
       subject = mail.subject
-      valid_part = (email.text_part || email.html_part || email)
+      valid_part = (mail.text_part || mail.html_part || mail)
       charset = valid_part.content_type_parameters['charset']
       body = valid_part.body.decoded.force_encoding(charset).encode('UTF-8')
 
