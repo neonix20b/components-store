@@ -31,7 +31,6 @@ class Spree::MessagesController < Spree::StoreController
   end
 
   def router
-    puts "MAILGUN:#{params.inspect}"
     if params[:key] == ENV["MAILGUN_KEY"] and params["body-mime"].present?
       mail = Mail.new(params["body-mime"])
       from = mail.from.first
@@ -40,10 +39,6 @@ class Spree::MessagesController < Spree::StoreController
       valid_part = (mail.text_part || mail.html_part || mail)
       charset = valid_part.content_type_parameters['charset']
       body = valid_part.body.decoded.force_encoding(charset).encode('UTF-8')
-
-      # from = params[:sender]
-      # subject = params[:subject]
-      # body = params["body-plain"]
 
       Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: from)
       Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: subject)
@@ -58,8 +53,6 @@ class Spree::MessagesController < Spree::StoreController
         m = order.emails.create!(from: from, to: to, subject: subject, body: body, direction: :in)
         if mail.attachments.present?
           mail.attachments.each do |a|
-            # io = URI.open(url, http_basic_authentication: ["api", ENV["MAILGUN_KEY"]])
-            # m.files.attach(io: io, filename: f["name"])
             m.files.attach(io: StringIO.new(a.decoded), filename: a.filename, content_type: a.content_type)
           end
         end
