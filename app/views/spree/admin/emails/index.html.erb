@@ -6,6 +6,24 @@
   <%#= button_link_to Spree.t('admin.navigation.add_new_email'), new_object_url, { class: "btn-primary", icon: 'add.svg', id: 'new_email' } %>
 <% end if can?(:create, Email) %>
 
+<% content_for :page_tabs do %>
+  <li class="nav-item">
+    <%= link_to "Все",
+      spree.admin_emails_path(),
+      class: "nav-link #{'active' if params[:q][:direction_eq].blank?}" %>
+  </li>
+  <li class="nav-item">
+    <%= link_to "Входящие",
+      params.merge({q: {direction_eq: Email.directions["in"]}}).permit!,
+      class: "nav-link #{'active' if params[:q][:direction_eq] == Email.directions["in"]}" %>
+  </li>
+  <li class="nav-item">
+    <%= link_to "Исходящие",
+      params.merge({q: {direction_eq: Email.directions["out"]}}).permit!,
+      class: "nav-link #{'active' if params[:q][:direction_eq] == Email.directions["out"]}" %>
+  </li>
+<% end %>
+
 <% content_for :table_filter do %>
   <div data-hook="admin_emails_sidebar">
     <%= search_form_for [:admin, @search] do |f| %>
@@ -14,10 +32,11 @@
 
         <div class="col-12 col-lg-4">
           <div class="form-group">
-            <%= f.label :subject_cont, "Теме" %>
+            <%= f.label :subject_cont, "Тема" %>
             <%= f.text_field :subject_cont, size: 15, class: "form-control js-quick-search-target js-filterable" %>
           </div>
         </div>
+
         <div class="col-12 col-lg-4">
           <div class="form-group">
             <%= f.label :from_eq, "От кого" %>
