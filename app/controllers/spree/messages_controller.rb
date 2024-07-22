@@ -31,8 +31,8 @@ class Spree::MessagesController < Spree::StoreController
   end
 
   def router
+    puts "MAILGUN:#{params.inspect}"
     if params[:key] == ENV["MAILGUN_KEY"] and params["body-mime"].present?
-      puts params.inspect
       mail = Mail.new(params["body-mime"])
       from = mail.from.first
       to = mail.recipients.first
