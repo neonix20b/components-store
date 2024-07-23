@@ -40,7 +40,7 @@ class YandexMarketFeed
 		            			end
 		            			xml.sales_notes "Необходима предоплата."
 		            			xml.manufacturer_warranty "true"
-		            			xml.available "true"
+		            			# xml.available "true"
 		            			xml.pickup "true"
 		            		end
 		            	end

@@ -18,6 +18,10 @@
           <td>
             <% if email.order.present? %>
               <%= link_to email.order.number, admin_order_customer_path(email.order)%>
+            <%else%>
+              <span class="state badge badge-pill badge-warning badge-pill text-capitalize" id="email_order">
+                  Нет заказа
+              </span>
             <%end%>
             <div class="small"><%= email.created_at.strftime("%H:%M %Z %d.%m.%Y") %></div>
           </td>
