@@ -3,7 +3,7 @@
 <% end %>
 
 <% content_for :page_actions do %>
-  <%#= button_link_to Spree.t('admin.navigation.add_new_email'), new_object_url, { class: "btn-primary", icon: 'add.svg', id: 'new_email' } %>
+  <%= button_link_to Spree.t('admin.navigation.add_new_email'), new_object_url, { class: "btn-primary", icon: 'add.svg', id: 'new_email' } %>
 <% end if can?(:create, Email) %>
 
 <% content_for :page_tabs do %>

@@ -12,8 +12,9 @@ class Spree::MessagesController < Spree::StoreController
         domain: params[:from].split("@").last
       )
 
-      order = Spree::Order.find(params[:order_id])
-      m = order.emails.create!(from: params[:from], to: params[:email], subject: params[:subject], body: params[:body], read: true, direction: :out)
+      message = current_store.emails.new(from: params[:from], to: params[:email], subject: params[:subject], body: params[:body], read: true, direction: :out)
+      message.order = Spree::Order.find(params[:order_id]) if params[:order_id].present?
+      message.save!
       
       (1..5).each do |i|
         f = "file_#{i}".to_sym
@@ -21,7 +22,7 @@ class Spree::MessagesController < Spree::StoreController
           uploaded_io = params[f]
           mail.attachments[uploaded_io.original_filename] = uploaded_io.read
           uploaded_io.rewind
-          m.files.attach(uploaded_io)
+          message.files.attach(uploaded_io)
         end
       end
 
@@ -44,19 +45,25 @@ class Spree::MessagesController < Spree::StoreController
       Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: subject)
       Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: body)
 
+      message = current_store.emails.new(from: from, to: to, subject: subject, body: body, direction: :in)
+
       order = Spree::Order.find_by_number(subject[/\b(\w\d{8,})\b/,1])
       order = Spree::Order.find_by_number(body[/\b(\w\d{8,})\b/,1]) if order.nil?
       unless order.nil?
         config = Spree::Store.default.configs.find_by(name: "telegram")
         config.payload["order"] = order.number
 		    config.save!
-        m = order.emails.create!(from: from, to: to, subject: subject, body: body, direction: :in)
-        if mail.attachments.present?
-          mail.attachments.each do |a|
-            m.files.attach(io: StringIO.new(a.decoded), filename: a.filename, content_type: a.content_type)
-          end
+        message.order = order
+      end
+
+      message.save!
+      
+      if mail.attachments.present?
+        mail.attachments.each do |a|
+          message.files.attach(io: StringIO.new(a.decoded), filename: a.filename, content_type: a.content_type)
         end
       end
+      #end
     end
     render plain: 'ok'
   end

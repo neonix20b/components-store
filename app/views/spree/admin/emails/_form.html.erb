@@ -14,7 +14,7 @@
      <div id="customer-email-field" class="collapse hide" aria-labelledby="email-form-headining" data-parent="#accordion_email_form">
         <div class="card-body">
         <%= form_with url: spree.email_messages_path, method: :post do |f| %>
-            <%= f.hidden_field :order_id, value: order.id %>
+            <%= f.hidden_field :order_id, value: order.try(:id) %>
             <p>Справочно: <b><%= current_store.customer_support_email %></b></p>
             <div class="form-group">
                 <%= f.label :from, "От:" %>
@@ -23,14 +23,16 @@
             <%#= f.hidden_field :from, value: current_store.customer_support_email %>
             <div class="form-group">
                 <%= f.label :email, "Кому: #{reply.present? ? reply.from : ""}" %>
-                <%= f.email_field :email, value: order.email, class: 'form-control' %>
+                <%= f.email_field :email, value: (order.try(:email) || reply.try(:from)), class: 'form-control' %>
             </div>
             <div class="form-group">
                 <%= f.label :subject, "Тема:" %>
                 <%if reply.present?%>
                     <%= f.text_field :subject, value: "Re: #{reply.subject}", class: 'form-control' %>
-                <%else%>
+                <%elsif order.present? %>
                     <%= f.text_field :subject, value: "#{order.number}: уточнение по заказу", class: 'form-control' %>
+                <%else%>
+                    <%= f.text_field :subject, value: "Уточнение информации", class: 'form-control' %>
                 <%end%>
             </div>
             <div class="form-group">

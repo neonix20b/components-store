@@ -16,7 +16,9 @@
             <%= email.body.truncate(400) %>
           </td>
           <td>
-            <%= link_to email.order.number, admin_order_customer_path(email.order)%>
+            <% if email.order.present? %>
+              <%= link_to email.order.number, admin_order_customer_path(email.order)%>
+            <%end%>
             <div class="small"><%= email.created_at.strftime("%H:%M %Z %d.%m.%Y") %></div>
           </td>
           <td class="actions" data-hook="admin_emails_index_row_actions">
