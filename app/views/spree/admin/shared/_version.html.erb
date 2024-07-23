@@ -1,1 +1,2 @@
-<%= tab("Письма", url: admin_emails_path, match_path: "/admin/emails", icon: "at.svg") %>
+<% count = current_store.emails.in.where(read: false).count %>
+<%= tab( (count > 0 ? "Новых писем: #{count}" : "Письма"), url: admin_emails_path, match_path: "/admin/emails", icon: "at.svg") %>
