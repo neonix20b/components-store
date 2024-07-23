@@ -15,12 +15,12 @@
   <li class="nav-item">
     <%= link_to "Входящие",
       params.merge({q: {direction_eq: Email.directions["in"]}}).permit!,
-      class: "nav-link #{'active' if params[:q][:direction_eq] == Email.directions["in"]}" %>
+      class: "nav-link #{'active' if params[:q][:direction_eq] == Email.directions["in"].to_s}" %>
   </li>
   <li class="nav-item">
     <%= link_to "Исходящие",
       params.merge({q: {direction_eq: Email.directions["out"]}}).permit!,
-      class: "nav-link #{'active' if params[:q][:direction_eq] == Email.directions["out"]}" %>
+      class: "nav-link #{'active' if params[:q][:direction_eq] == Email.directions["out"].to_s}" %>
   </li>
 <% end %>
 
@@ -61,8 +61,8 @@
 <% end %>
 
 <% if @emails.any? %>
-<%= render 'table', emails: @emails %>
-<%= render 'spree/admin/shared/index_table_options', collection: @emails, simple: true %>
+  <%= render 'table', emails: @emails %>
+  <%= render 'spree/admin/shared/index_table_options', collection: @emails, simple: true %>
 <% else %>
   <div class="text-center no-objects-found m-5">
     <%= Spree.t('admin.navigation.you_have_no_emails') %>
