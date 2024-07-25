@@ -4,7 +4,7 @@ module Ai::ModuleRequest
   DEFAULT_MAX_TOKEN = 4096
   DEFAULT_TEMPERATURE = 0.7
 
-  def initialize(model: DEFAULT_MODEL, max_tokens: DEFAULT_MAX_TOKEN, temperature: DEFAULT_TEMPERATURE)
+  def initializeRequests(model: DEFAULT_MODEL, max_tokens: DEFAULT_MAX_TOKEN, temperature: DEFAULT_TEMPERATURE)
     @max_tokens = max_tokens
     @custom_id = SecureRandom.uuid
     @model = model
@@ -19,8 +19,9 @@ module Ai::ModuleRequest
     @messages = []
   end
 
-  def append role:, content:
-    @messages << {role: role, content: content}
+  def append role: nil, content: nil, messages: nil
+    @messages << {role: role, content: content} if role.present? or content.present?
+    @messages += messages if messages.present?
   end
 
   def params

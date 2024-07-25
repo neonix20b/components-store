@@ -1,5 +1,6 @@
 class Ai::Request
   include Ai::ModuleRequest
+  alias_method :initialize, :initializeRequests 
 
   def finish
     @custom_id = SecureRandom.uuid

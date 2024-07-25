@@ -1,4 +1,5 @@
-class Ai::StateBatch
+class Ai::StateBatch < Ai::StateHelper
+  alias_method :state_initialize, :initialize
   attr_accessor :file_id, :batch_id
 
   state_machine :batch_state, initial: ->(t){t.batch_id.present? ? :requested : :idle}, namespace: :batch do
@@ -33,11 +34,7 @@ class Ai::StateBatch
       transition [:requested, :prepared] => :failed
     end
 
-    state :requested do
-      def ticker
-        puts "TICKER"
-      end
-    end
+    state :requested
     state :idle
     state :prepared
     state :canceled
@@ -45,18 +42,14 @@ class Ai::StateBatch
     state :failed
   end
 
-  def log_me(transition)
-    puts "`#{transition.event}` was called to transition from #{transition.from} to #{transition.to}"
-  end
-
   def cleanup
     @file_id = nil
     @batch_id = nil
   end
 
-  def initialize(batch_id: nil)
+  def initialize
+    puts "call: StateBatch::#{__method__}"
     cleanup()
-    @batch_id = batch_id
     super()
   end
 end

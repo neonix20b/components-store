@@ -1,10 +1,11 @@
 class Ai::DelayedRequest < Ai::StateBatch
   include Ai::ModuleRequest
 
-  def initialize(batch_id: nil, model: DEFAULT_MODEL, max_tokens: DEFAULT_MAX_TOKEN, temperature: DEFAULT_TEMPERATURE)
-    initialize(model: model, max_tokens: max_tokens, temperature: temperature)
+  def initializeRequests(batch_id: nil, model: DEFAULT_MODEL, max_tokens: DEFAULT_MAX_TOKEN, temperature: DEFAULT_TEMPERATURE)
+    requests_initialize(model: model, max_tokens: max_tokens, temperature: temperature)
+    super()
     @custom_id = batch_id.present? ? nil : SecureRandom.uuid
-    super(batch_id: batch_id)
+    @batch_id = batch_id
   end
   def postBatch
     response = @client.batches.create(
@@ -18,7 +19,7 @@ class Ai::DelayedRequest < Ai::StateBatch
   end
 
   def cancelBatch
-
+    @client.batches.cancel(id: @batch_id)
   end
 
   def cleanStorage
@@ -69,6 +70,10 @@ class Ai::DelayedRequest < Ai::StateBatch
     prepare_batch! if @messages.any?
   end
 
+  def cancel
+    cancel_batch!
+  end
+
   def completed?
     return false if @batch_id.nil?
     batch = @client.batches.retrieve(id: @batch_id)
@@ -79,7 +84,7 @@ class Ai::DelayedRequest < Ai::StateBatch
 			output.each do |line|
 				@custom_id = line["custom_id"]
 				@result = line.dig("response", "body", "choices", 0, "message", "content")
-        complite_batch!
+        complete_batch!
 			end
 		elsif !batch["error_file_id"].nil?
 			@result = @client.files.content(id: batch["error_file_id"])
