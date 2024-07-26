@@ -4,7 +4,7 @@ class Ai::StateTools
   state_machine :state, initial: :idle do
     before_transition from: any, do: :log_me
     
-    after_transition on: :iterate, do: :iterate
+    after_transition on: :iterate, do: :nextIteration
     after_transition on: :request, do: :externalRequest
     after_transition on: :prepare, do: :init
     after_transition on: :analyze, do: :processResult
@@ -26,7 +26,7 @@ class Ai::StateTools
     end
 
     event :iterate do
-      transition :analyzed => :prepared
+      transition [:analyzed, :finished] => :prepared
     end
 
     event :end do

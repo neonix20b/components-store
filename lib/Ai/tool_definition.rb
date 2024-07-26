@@ -97,7 +97,7 @@ module Ai::ToolDefinition
     #
     # @return [String] JSON string of schemas in OpenAI format
     def to_openai_format
-      @schemas.values
+      @schemas.values.map { |schema| schema[:function] }
     end
 
     # Converts schemas to Anthropic-compatible format

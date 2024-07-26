@@ -1,5 +1,6 @@
 class Ai::ModuleRequest
   attr_accessor :result, :client, :messages, :model, :max_tokens, :custom_id, :temperature, :tools, :errors
+  attr_accessor :function_call, :external_call
   DEFAULT_MODEL = "gpt-4o-mini"
   DEFAULT_MAX_TOKEN = 4096
   DEFAULT_TEMPERATURE = 0.7
@@ -45,5 +46,22 @@ class Ai::ModuleRequest
     rescue Faraday::ResourceNotFound => e
       nil
     end
+  end
+
+  def parseChoices(response)
+    @result = response.dig("choices", 0, "message", "content")
+    @function_call = response.dig("choices", 0, "message", "function_call")
+    if @function_call.present?
+      args = JSON.parse(@function_call["arguments"], { symbolize_names: true } )
+      @external_call = {
+        class: @function_call["name"].split("__").first.gsub("_", "/").camelize,
+        name: @function_call["name"].split("__").last.camelize(:lower),
+        args: args
+      }
+    else
+      @external_call = nil
+      @errors = nil
+    end
+    # Assistant.send(function_name, **args)
   end
 end
