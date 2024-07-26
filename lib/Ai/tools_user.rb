@@ -5,6 +5,7 @@ class Ai::ToolsUser < Ai::StateTools
     puts "call: #{__method__}"
     @worker = worker
     @messages = []
+    @tools = []
     @role = nil
     @context = nil
     @result = nil
@@ -16,6 +17,7 @@ class Ai::ToolsUser < Ai::StateTools
     @worker.append(role: :system, content: @role) if @role.present?
     @worker.append(messages: @context) if !@context.nil? and @context.any?
     @worker.append(messages: @messages)
+    @worker.tools = @tools.map { |tool| tool.function_schemas.to_openai_format }.flatten if @tools.any?
     request!
   end
 
