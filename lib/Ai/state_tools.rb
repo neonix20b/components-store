@@ -1,4 +1,5 @@
-class Ai::StateTools < Ai::StateHelper
+class Ai::StateTools
+  include Ai::StateHelper
 
   state_machine :state, initial: :idle do
     before_transition from: any, do: :log_me

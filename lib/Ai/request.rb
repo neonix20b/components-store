@@ -1,5 +1,4 @@
-class Ai::Request
-  include Ai::ModuleRequest
+class Ai::Request < Ai::ModuleRequest
   alias_method :initialize, :initializeRequests 
 
   def finish

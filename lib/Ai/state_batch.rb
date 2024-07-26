@@ -10,7 +10,7 @@ class Ai::StateBatch < Ai::ModuleRequest
     after_transition on: :end, do: :cleanup
     before_transition on: :process, do: :postBatch
     after_transition on: :cancel, do: [:cancelBatch, :complete_batch!]
-    after_transition on: :complete, do: [:cleanStorage, :end_batch!]
+    after_transition on: :complete, do: [:cleanStorage]
     after_transition on: :prepare, do: :uploadToStorage
 
     event :end do

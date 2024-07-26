@@ -38,7 +38,7 @@ class Ai::DelayedRequest < Ai::StateBatch
 
   def finish
     @custom_id = SecureRandom.uuid
-    complete_batch!
+    end_batch!
   end
 
   def uploadToStorage

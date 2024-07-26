@@ -41,8 +41,8 @@ class Ai::ToolsUser < Ai::StateTools
 
   def processResult
     puts "call: #{__method__} state: #{state_name}"
-    if @worker.result.present?
-      @result = @worker.result
+    if @worker.result.present? || @worker.errors.present?
+      @result = @worker.result || @worker.errors
       @worker.finish()
       complete!
     end
@@ -73,7 +73,11 @@ class Ai::ToolsUser < Ai::StateTools
 
 end
 
-# Ai::ToolsUser.new(worker: Ai::Request.new)
+# r = Ai::ToolsUser.new(worker: Ai::Request.new)
+# r.setTask("сколько будет 2+2?")
+# r.execute
+# r.result
+
 
 # @worker.append(role: "user", content: "сколько будет 2+2?")
 # @worker.request!
