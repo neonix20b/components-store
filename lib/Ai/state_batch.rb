@@ -1,4 +1,6 @@
-class Ai::StateBatch < Ai::StateHelper
+class Ai::StateBatch < Ai::ModuleRequest
+  include Ai::StateHelper
+
   alias_method :state_initialize, :initialize
   attr_accessor :file_id, :batch_id
 
@@ -7,7 +9,8 @@ class Ai::StateBatch < Ai::StateHelper
 
     after_transition on: :end, do: :cleanup
     before_transition on: :process, do: :postBatch
-    after_transition on: :cancel, do: [:cancelBatch, :cleanStorage]
+    after_transition on: :cancel, do: [:cancelBatch, :complete_batch!]
+    after_transition on: :complete, do: [:cleanStorage, :end_batch!]
     after_transition on: :prepare, do: :uploadToStorage
 
     event :end do
@@ -23,7 +26,7 @@ class Ai::StateBatch < Ai::StateHelper
     end
 
     event :complete do
-      transition :requested => :finished
+      transition [:requested, :failed] => :finished
     end
 
     event :cancel do
@@ -45,11 +48,11 @@ class Ai::StateBatch < Ai::StateHelper
   def cleanup
     @file_id = nil
     @batch_id = nil
+    super()
   end
 
   def initialize
     puts "call: StateBatch::#{__method__}"
-    cleanup()
     super()
   end
 end

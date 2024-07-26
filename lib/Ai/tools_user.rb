@@ -75,7 +75,7 @@ end
 
 # Ai::ToolsUser.new(worker: Ai::Request.new)
 
-# @worker.append(role: "user", content: "привет, как тебя зовут?")
+# @worker.append(role: "user", content: "сколько будет 2+2?")
 # @worker.request!
 # @worker.completed?
 # @worker.result

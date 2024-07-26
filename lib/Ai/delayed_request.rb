@@ -1,11 +1,10 @@
 class Ai::DelayedRequest < Ai::StateBatch
-  include Ai::ModuleRequest
-
-  def initializeRequests(batch_id: nil, model: DEFAULT_MODEL, max_tokens: DEFAULT_MAX_TOKEN, temperature: DEFAULT_TEMPERATURE)
-    requests_initialize(model: model, max_tokens: max_tokens, temperature: temperature)
-    super()
-    @custom_id = batch_id.present? ? nil : SecureRandom.uuid
+  def initialize(batch_id: nil, model: DEFAULT_MODEL, max_tokens: DEFAULT_MAX_TOKEN, temperature: DEFAULT_TEMPERATURE)
+    initializeRequests(model: model, max_tokens: max_tokens, temperature: temperature)
+    @custom_id = nil if batch_id.present?
     @batch_id = batch_id
+    @file_id = nil
+    super()
   end
   def postBatch
     response = @client.batches.create(
@@ -19,29 +18,27 @@ class Ai::DelayedRequest < Ai::StateBatch
   end
 
   def cancelBatch
-    @client.batches.cancel(id: @batch_id)
+    not_found_is_ok{ @client.batches.cancel(id: @batch_id) }
   end
 
   def cleanStorage
     if @batch_id.present?
       batch = @client.batches.retrieve(id: @batch_id)
       if !batch["output_file_id"].nil?
-        @client.files.delete(id: batch["output_file_id"])
+        not_found_is_ok{ @client.files.delete(id: batch["output_file_id"]) }
       elsif !batch["error_file_id"].nil?
-        puts @client.files.content(id: batch["error_file_id"])
-        @client.files.delete(id: batch["error_file_id"])
+        not_found_is_ok{ @client.files.delete(id: batch["error_file_id"]) }
       end
-      @client.files.delete(id: batch["input_file_id"])
-      @client.files.delete(id: @file_id) if @file_id.present? && @file_id != batch["input_file_id"]
+      not_found_is_ok{ @client.files.delete(id: batch["input_file_id"]) }
+      not_found_is_ok{ @client.files.delete(id: @file_id) } if @file_id.present? && @file_id != batch["input_file_id"]
     elsif @file_id.present?
-      @client.files.delete(id: @file_id)
+      not_found_is_ok{ @client.files.delete(id: @file_id) }
     end
   end
 
   def finish
-    cleanStorage()
     @custom_id = SecureRandom.uuid
-    end_batch!
+    complete_batch!
   end
 
   def uploadToStorage
@@ -77,7 +74,13 @@ class Ai::DelayedRequest < Ai::StateBatch
   def completed?
     return false if @batch_id.nil?
     batch = @client.batches.retrieve(id: @batch_id)
-    return false if batch["status"] != "completed"
+    if batch["status"] == "failed"
+      @errors = batch["errors"]["data"].map{|e| e["message"]}
+      fail_batch!
+      return true
+    elsif batch["status"] != "completed"
+      return false 
+    end
 
     if !batch["output_file_id"].nil?
 			output = @client.files.content(id: batch["output_file_id"])
@@ -87,7 +90,7 @@ class Ai::DelayedRequest < Ai::StateBatch
         complete_batch!
 			end
 		elsif !batch["error_file_id"].nil?
-			@result = @client.files.content(id: batch["error_file_id"])
+			@errors = @client.files.content(id: batch["error_file_id"])
       fail_batch!
 		end
     return true
@@ -95,7 +98,7 @@ class Ai::DelayedRequest < Ai::StateBatch
 end
 
 # r = Ai::DelayedRequest.new
-# r.append(role: "user", content: "привет, как тебя зовут?")
+# r.append(role: "user", content: "сколько будет 2+2?")
 # r.request!
 # r.completed?
 # r.result
