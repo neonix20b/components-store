@@ -15,12 +15,12 @@ module Ai::Tool
     extend Ai::ToolDefinition
     include Ai::DependencyHelper
 
-    define_function :execute, description: "Выполнить код на ruby" do
-      property :input, type: "string", description: "Программный код на ruby", required: true
+    define_function :ruby, description: "Выполнить код на ruby" do
+      property :input, type: "string", description: "Исходный код на ruby", required: true
     end
 
-    def execute(input:)
-      puts("Executing \"#{input}\"", for: self.class)
+    def ruby(input:)
+      puts("Executing \"#{input}\"")
       eval(input)
     end
   end

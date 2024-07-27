@@ -16,20 +16,21 @@ class Ai::Iterator < Ai::StateTools
   end
 
   def innerVoice text:
+    # Используй внутренний голос для планирования и проговаривания
     @queue << {role: :assistant, content: text}
     return nil
   end
 
-  def outerVoice text:, wait_for_response: true
-    @result = text
-    msg = {role: :assistant, content: text}
-    if wait_for_response
-      @messages << msg
-      complete! 
-    else
-      @queue << msg
-      # external callback for assistant
-    end
+  def outerVoice text:
+    @queue << {role: :assistant, content: text}
+    # external callback for assistant
+    return nil
+  end
+
+  def askQuestion question:
+    @result = question
+    @messages << {role: :assistant, content: question}
+    complete! 
     return nil
   end
 
@@ -38,7 +39,8 @@ class Ai::Iterator < Ai::StateTools
     @worker.append(role: :system, content: @role) if @role.present?
     @worker.append(messages: @context) if !@context.nil? and @context.any?
     @worker.append(messages: @messages)
-    @worker.tools = @tools.map { |tool| tool.class.function_schemas.to_openai_format }.flatten if @tools.any?
+    @worker.tools = [self] 
+    @worker.tools += @tools.map { |tool| tool.class.function_schemas.to_openai_format }.flatten if @tools.any?
     request!
   end
 
@@ -119,7 +121,7 @@ end
 # @worker.result
 # @worker.finish
 # 
-# r = Ai::ToolsUser.new(worker: Ai::Request.new)
+# r = Ai::Iterator.new(worker: Ai::Request.new)
 # r.role = "ты программный агент внутри моего компьютера"
 # r.tools = [Ai::Tool::Eval.new]
 # r.setTask("покажи мне файлы на диске, используй код на ruby")
