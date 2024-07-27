@@ -675,6 +675,7 @@ DEPENDENCIES
   rack-attack
   rack-host-redirect
   rails
+  rainbow
   redcarpet
   redis
   ruby-openai

@@ -1,35 +1,57 @@
 class Ai::Iterator < Ai::StateTools
-  attr_accessor :worker, :role, :messages, :context, :result, :tools, :queue
+  extend Ai::ToolDefinition
+  attr_accessor :worker, :role, :messages, :context, :result, :tools, :queue, :monologue
+
+  define_function :innerMonologue, description: "Используй внутренний монолог для планирования ответа и проговаривания основных тезисов" do
+    property :speach, type: "string", description: "Текст", required: true
+  end
+
+  define_function :outerVoice, description: "Сообщить пользователю необходимую информацию без ожидания ответа" do
+    property :text, type: "string", description: "Текст", required: true
+  end
+
+  define_function :actionRequest, description: "Задать уточняющий вопрос или попросить о действии с получением ответа от пользователя" do
+    property :action, type: "string", description: "Текст", required: true
+  end
 
   def initialize(worker:, role: nil, tools: [])
     puts "call: #{__method__}"
     @worker = worker
     @messages = []
-    @tools = tools
+    @tools = [self] + tools
     @role = role
     @context = nil
     @result = nil
     @queue = []
+    @monologue = []
+
+    @monologue << "Всегда выполняй следующие шаги, чтобы ответить на вопросы пользователей."
+    @monologue << "Шаг 1. Сначала разработай собственное решение проблемы. Не полагайтесь на решение пользователя, так как оно может быть неверным. Заключи все свои наработки для этого шага в функцию innerMonologue."
+    @monologue << "Шаг 2. Соотнеси свое решение с поставленной задачей, улучши его и начиний вызывать все необходимые функции в нужной последовательности шаг за шагом."
+    @monologue << "Шаг 2.1. Во время работы взаимодействуй с пользователем с помощью функций outerVoice и actionRequest."
+    @monologue << "Шаг 3. Когда решение будет готово, сообщи о нем с помощью функции actionRequest."
 
     # @tools = Ai::Tool.constants.map(&Ai::Tool.method(:const_get)).select { |c| c.is_a? Class }.map{|c|c.new}
     super()
   end
 
-  def innerVoice text:
-    # Используй внутренний голос для планирования и проговаривания
-    @queue << {role: :assistant, content: text}
+  def innerMonologue speach:
+    puts Rainbow("monologue: #{speach}").yellow
+    @queue << {role: :assistant, content: speach}
     return nil
   end
 
   def outerVoice text:
+    puts Rainbow("voice: #{text}").green
     @queue << {role: :assistant, content: text}
     # external callback for assistant
     return nil
   end
 
-  def askQuestion question:
-    @result = question
-    @messages << {role: :assistant, content: question}
+  def actionRequest action:
+    puts Rainbow("action: #{action}").red
+    @result = action
+    @messages << {role: :assistant, content: action}
     complete! 
     return nil
   end
@@ -37,10 +59,10 @@ class Ai::Iterator < Ai::StateTools
   def init
     puts "call: #{__method__} state: #{state_name}"
     @worker.append(role: :system, content: @role) if @role.present?
+    @worker.append(role: :system, content: @monologue.join("\n"))
     @worker.append(messages: @context) if !@context.nil? and @context.any?
     @worker.append(messages: @messages)
-    @worker.tools = [self] 
-    @worker.tools += @tools.map { |tool| tool.class.function_schemas.to_openai_format }.flatten if @tools.any?
+    @worker.tools = @tools.map { |tool| tool.class.function_schemas.to_openai_format }.flatten if @tools.any?
     request!
   end
 
@@ -54,7 +76,12 @@ class Ai::Iterator < Ai::StateTools
 
   def externalRequest
     puts "call: #{__method__} state: #{state_name}"
-    @worker.request!
+    begin
+      @worker.request!()
+    rescue SystemStackError => e
+      puts e.inspect
+      puts e.backtrace.join("\n")
+    end
     ticker()
   end
 
@@ -71,7 +98,8 @@ class Ai::Iterator < Ai::StateTools
     @result = @worker.result || @worker.errors
     if @worker.external_call.present?
       @queue << {role: :assistant, content: @worker.function_call.to_s}
-      out = @tools.first.send(@worker.external_call[:name], **@worker.external_call[:args])
+      tool = @tools.select{|t| t.class.name == @worker.external_call[:class] && t.respond_to?(@worker.external_call[:name]) }.first
+      out = tool.send(@worker.external_call[:name], **@worker.external_call[:args])
       if can_iterate?
         @queue << {role: :system, content: out.to_s} if out.present?
         iterate!

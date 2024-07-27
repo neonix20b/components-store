@@ -15,13 +15,23 @@ module Ai::Tool
     extend Ai::ToolDefinition
     include Ai::DependencyHelper
 
-    define_function :ruby, description: "Выполнить код на ruby" do
+    define_function :ruby, description: "Выполнить код на ruby, возвращаемое значение - результат вычисления последней строки" do
       property :input, type: "string", description: "Исходный код на ruby", required: true
     end
 
+    define_function :sh, description: "Выполнить sh-команду и получить ее результат (stdout + stderr)" do
+      property :input, type: "string", description: "Исходная команда", required: true
+    end
+
     def ruby(input:)
-      puts("Executing \"#{input}\"")
+      puts("Executing ruby: \"#{input}\"")
       eval(input)
+    end
+
+    def sh(input:)
+      puts("Executing sh: \"#{input}\"")
+      stdout_and_stderr_s, _ = Open3.capture2e(input)
+      return stdout_and_stderr_s
     end
   end
 end

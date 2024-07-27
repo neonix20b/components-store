@@ -11,7 +11,7 @@ class Ai::StateTools
     after_transition on: :complete, do: :completeIteration
 
     event :prepare do
-      transition [:idle, :finished] => :prepared
+      transition :idle => :prepared
     end
 
     event :request do
@@ -27,7 +27,7 @@ class Ai::StateTools
     end
 
     event :iterate do
-      transition [:analyzed, :finished] => :prepared
+      transition :analyzed => :prepared
     end
 
     event :end do

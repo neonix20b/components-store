@@ -105,3 +105,4 @@ gem 'spree_image_list_cms_sections', github: 'neonix20b/spree_image_list_cms_sec
 gem 'rack-attack'
 gem 'telegram-bot'
 gem 'state_machines'
+gem 'rainbow'
