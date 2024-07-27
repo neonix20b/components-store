@@ -1,4 +1,4 @@
-class Ai::ToolsUser < Ai::StateTools
+class Ai::Iterator < Ai::StateTools
   attr_accessor :worker, :role, :messages, :context, :result, :tools, :queue
 
   def initialize(worker:, role: nil, tools: [])
@@ -15,6 +15,24 @@ class Ai::ToolsUser < Ai::StateTools
     super()
   end
 
+  def innerVoice text:
+    @queue << {role: :assistant, content: text}
+    return nil
+  end
+
+  def outerVoice text:, wait_for_response: true
+    @result = text
+    msg = {role: :assistant, content: text}
+    if wait_for_response
+      @messages << msg
+      complete! 
+    else
+      @queue << msg
+      # external callback for assistant
+    end
+    return nil
+  end
+
   def init
     puts "call: #{__method__} state: #{state_name}"
     @worker.append(role: :system, content: @role) if @role.present?
@@ -27,6 +45,7 @@ class Ai::ToolsUser < Ai::StateTools
   def nextIteration
     puts "call: #{__method__} state: #{state_name}"
     @worker.append(messages: @queue)
+    @messages += @queue
     @queue = []
     request!
   end
@@ -40,7 +59,7 @@ class Ai::ToolsUser < Ai::StateTools
   def ticker
     puts "call: #{__method__} state: #{state_name}"
     while !@worker.completed? do 
-      sleep(10) 
+      sleep(60) 
     end
     analyze!
   end
@@ -49,15 +68,19 @@ class Ai::ToolsUser < Ai::StateTools
     puts "call: #{__method__} state: #{state_name}"
     @result = @worker.result || @worker.errors
     if @worker.external_call.present?
-      out = @tools.first.send(@worker.external_call[:name], **@worker.external_call[:args])
       @queue << {role: :assistant, content: @worker.function_call.to_s}
-      @queue << {role: :system, content: out.to_s}
-      iterate!
-    else
-      @worker.finish()
+      out = @tools.first.send(@worker.external_call[:name], **@worker.external_call[:args])
+      if can_iterate?
+        @queue << {role: :system, content: out.to_s} if out.present?
+        iterate!
+      end
+    elsif @result.present?
       complete!
     end
-    # iterate!
+  end
+
+  def completeIteration
+    @worker.finish()
   end
   
   def setTask task
@@ -84,7 +107,7 @@ class Ai::ToolsUser < Ai::StateTools
 
 end
 
-# r = Ai::ToolsUser.new(worker: Ai::Request.new)
+# r = Ai::Iterator.new(worker: Ai::Request.new)
 # r.setTask("сколько будет 2+2?")
 # r.execute
 # r.result

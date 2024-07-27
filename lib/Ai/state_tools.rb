@@ -8,9 +8,10 @@ class Ai::StateTools
     after_transition on: :request, do: :externalRequest
     after_transition on: :prepare, do: :init
     after_transition on: :analyze, do: :processResult
+    after_transition on: :complete, do: :completeIteration
 
     event :prepare do
-      transition :idle => :prepared
+      transition [:idle, :finished] => :prepared
     end
 
     event :request do
