@@ -41,9 +41,11 @@ class Spree::MessagesController < Spree::StoreController
       charset = valid_part.content_type_parameters['charset']
       body = valid_part.body.decoded.force_encoding(charset).encode('UTF-8')
 
-      Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: from)
-      Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: subject)
-      Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: body)
+      begin
+        Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: from)
+        Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: subject)
+        Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: body.truncate(1000))
+      end
 
       store = Spree::Store.find_by(url: to.split("@").last)
       store = current_store if store.nil?
@@ -61,7 +63,7 @@ class Spree::MessagesController < Spree::StoreController
         config = Spree::Store.default.configs.find_by(name: "telegram")
         config.payload["order"] = order.number
 		    config.save!
-        message.order = order
+        message.order = order if order.store == store
       end
 
       message.save!
