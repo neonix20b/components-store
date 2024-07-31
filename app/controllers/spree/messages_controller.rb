@@ -45,10 +45,18 @@ class Spree::MessagesController < Spree::StoreController
       Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: subject)
       Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: body)
 
-      message = current_store.emails.new(from: from, to: to, subject: subject, body: body, direction: :in)
+      store = Spree::Store.find_by(url: to.split("@").last)
+      store = current_store if store.nil?
 
       order = Spree::Order.find_by_number(subject[/\b(\w\d{8,})\b/,1])
       order = Spree::Order.find_by_number(body[/\b(\w\d{8,})\b/,1]) if order.nil?
+
+      if order.nil?
+        order = Email.where(to: from).or(Email.where(from: from)).order(created_at: :desc).first.try(:order)
+      end
+
+      message = store.emails.new(from: from, to: to, subject: subject, body: body, direction: :in)
+
       unless order.nil?
         config = Spree::Store.default.configs.find_by(name: "telegram")
         config.payload["order"] = order.number
