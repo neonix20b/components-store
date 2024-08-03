@@ -44,7 +44,7 @@ class Spree::MessagesController < Spree::StoreController
       begin
         Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: from)
         Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: subject)
-        Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: body.truncate(1000))
+        Telegram.bot.send_message(chat_id: ENV["AIBOT_CHAT"], text: body.truncate(200))
       end
 
       store = Spree::Store.find_by(url: to.split("@").last)
