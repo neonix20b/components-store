@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   module EmailsDecorator
     def self.prepended(base)
@@ -5,7 +7,7 @@ module Spree
       if Email.column_names.include?(column)
         base.has_many :emails, foreign_key: column
       else
-        base.has_many :emails, foreign_key: column.delete_prefix("spree_")
+        base.has_many :emails, foreign_key: column.delete_prefix('spree_')
       end
     end
   end

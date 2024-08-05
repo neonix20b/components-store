@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   module ConfigDecorator
     def self.prepended(base)

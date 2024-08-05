@@ -1,4 +1,6 @@
-desc "Print reminder about eating more fruit."
+# frozen_string_literal: true
+
+desc 'Print reminder about eating more fruit.'
 
 namespace :feeds do
   task yandex: :environment do

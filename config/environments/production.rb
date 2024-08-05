@@ -1,4 +1,6 @@
-require "active_support/core_ext/integer/time"
+# frozen_string_literal: true
+
+require 'active_support/core_ext/integer/time'
 
 Rails.application.configure do
   # Prepare the ingress controller used to receive mail
@@ -55,17 +57,17 @@ Rails.application.configure do
   config.force_ssl = true
 
   # Log to STDOUT by default
-  config.logger = ActiveSupport::Logger.new(STDOUT)
-    .tap  { |logger| logger.formatter = ::Logger::Formatter.new }
-    .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
+  config.logger = ActiveSupport::Logger.new($stdout)
+                                       .tap  { |logger| logger.formatter = ::Logger::Formatter.new }
+                                       .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [ :request_id ]
+  config.log_tags = [:request_id]
 
   # "info" includes generic and useful information about system operation, but avoids logging too much
   # information to avoid inadvertent exposure of personally identifiable information (PII). If you
   # want to log everything, set the level to "debug".
-  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
+  config.log_level = ENV.fetch('RAILS_LOG_LEVEL', 'info')
 
   # Use a different cache store in production.
   config.cache_store = :solid_cache_store
@@ -75,8 +77,8 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "spree_starter_production"
 
   config.action_mailer.perform_caching = false
-  
-  config.action_mailer.default_url_options = { host: "smart-components.pro" }
+
+  config.action_mailer.default_url_options = { host: 'smart-components.pro' }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -84,7 +86,7 @@ Rails.application.configure do
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
-  config.i18n.fallbacks = [:en] #true
+  config.i18n.fallbacks = [:en] # true
   # config.i18n.default_locale = :ru
 
   # Don't log any deprecations.
@@ -95,7 +97,7 @@ Rails.application.configure do
 
   config.middleware.use Rack::HostRedirect, {
     'components.oxteam.me' => 'smart-components.pro',
-    'smart-components.store' => 'smart-components.pro',
+    'smart-components.store' => 'smart-components.pro'
   }
 
   # Enable DNS rebinding protection and other `Host` header attacks.
