@@ -1,12 +1,12 @@
 class Rack::Attack
-#   blocklist_ip("65.108.2.0/16")
-   blocklist_ip("23.22.35.162")
-   blocklist_ip("3.224.220.101") #amazonbot
-   blocklist_ip("52.70.240.171")
+  #   blocklist_ip("65.108.2.0/16")
+  blocklist_ip('23.22.35.162')
+  blocklist_ip('3.224.220.101') # amazonbot
+  blocklist_ip('52.70.240.171')
 
-   Rack::Attack.blocklist('block amazonbot') do |req|
-    req.user_agent.include?('Amazonbot') if !req.path.start_with?('/telegram')
-   end
+  Rack::Attack.blocklist('block amazonbot') do |req|
+    req.user_agent.include?('Amazonbot') unless req.path.start_with?('/telegram')
+  end
 
   # throttle("requests by ip", limit: 10, period: 2.seconds) do |req|
   #   if !req.path.start_with?('/assets') and !req.path.start_with?('/rails') and !req.path.start_with?('/up')
@@ -25,14 +25,15 @@ class Rack::Attack
   blocklist('fail2ban pentesters') do |req|
     Rack::Attack::Fail2Ban.filter("pentesters-#{req.ip}", maxretry: 1, findtime: 10.minutes, bantime: 60.minutes) do
       req.path.include?('/etc/passwd') ||
-      req.path.include?('wp-admin') ||
-      req.path.include?('wp-login') ||
-      req.path.include?('administrator') ||
-      req.path.include?('cgi-bin') ||
-      req.path.ends_with?('.php') ||
-      req.path.ends_with?('.yml') ||
-      req.path.ends_with?('.aspx') ||
-      req.path.ends_with?(".xml")
+        req.path.include?('wp-admin') ||
+        req.path.include?('wp-login') ||
+        req.path.include?('administrator') ||
+        req.path.include?('cgi-bin') ||
+        req.path.include?('.git') ||
+        req.path.ends_with?('.php') ||
+        req.path.ends_with?('.yml') ||
+        req.path.ends_with?('.aspx') ||
+        req.path.ends_with?('.xml')
     end
   end
 end
