@@ -36,7 +36,7 @@ class Spree::MessagesController < Spree::StoreController
     if params[:key] == ENV['MAILGUN_KEY'] and params['body-mime'].present?
       mail = Mail.new(params['body-mime'])
       from = mail.from.first
-      to = mail.recipients.first
+      to = mail.recipients.first || ""
       subject = mail.subject
       valid_part = mail.text_part || mail.html_part || mail
       charset = valid_part.content_type_parameters['charset']
