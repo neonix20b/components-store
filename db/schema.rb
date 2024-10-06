@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_23_091439) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_06_131213) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -202,6 +202,22 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_23_091439) do
     t.datetime "created_at", null: false
     t.index ["job_id"], name: "index_solid_queue_recurring_executions_on_job_id", unique: true
     t.index ["task_key", "run_at"], name: "index_solid_queue_recurring_executions_on_task_key_and_run_at", unique: true
+  end
+
+  create_table "solid_queue_recurring_tasks", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "schedule", null: false
+    t.string "command", limit: 2048
+    t.string "class_name"
+    t.text "arguments"
+    t.string "queue_name"
+    t.integer "priority", default: 0
+    t.boolean "static", default: true
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key"], name: "index_solid_queue_recurring_tasks_on_key", unique: true
+    t.index ["static"], name: "index_solid_queue_recurring_tasks_on_static"
   end
 
   create_table "solid_queue_scheduled_executions", force: :cascade do |t|
@@ -1114,8 +1130,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_23_091439) do
     t.bigint "reimbursement_id"
     t.jsonb "public_metadata"
     t.jsonb "private_metadata"
+    t.bigint "refunder_id"
     t.index ["payment_id"], name: "index_spree_refunds_on_payment_id"
     t.index ["refund_reason_id"], name: "index_refunds_on_refund_reason_id"
+    t.index ["refunder_id"], name: "index_spree_refunds_on_refunder_id"
     t.index ["reimbursement_id"], name: "index_spree_refunds_on_reimbursement_id"
   end
 
@@ -1360,9 +1378,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_23_091439) do
     t.boolean "backorderable_default", default: false
     t.boolean "propagate_all_variants", default: false
     t.string "admin_name"
+    t.datetime "deleted_at", precision: nil
     t.index ["active"], name: "index_spree_stock_locations_on_active"
     t.index ["backorderable_default"], name: "index_spree_stock_locations_on_backorderable_default"
     t.index ["country_id"], name: "index_spree_stock_locations_on_country_id"
+    t.index ["deleted_at"], name: "index_spree_stock_locations_on_deleted_at"
     t.index ["propagate_all_variants"], name: "index_spree_stock_locations_on_propagate_all_variants"
     t.index ["state_id"], name: "index_spree_stock_locations_on_state_id"
   end
@@ -1547,7 +1567,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_23_091439) do
     t.string "meta_description"
     t.string "meta_keywords"
     t.string "permalink"
+    t.string "pretty_name"
     t.index ["locale"], name: "index_spree_taxon_translations_on_locale"
+    t.index ["pretty_name"], name: "index_spree_taxon_translations_on_pretty_name"
     t.index ["spree_taxon_id", "locale"], name: "index_spree_taxon_translations_on_spree_taxon_id_and_locale", unique: true
   end
 
@@ -1592,6 +1614,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_23_091439) do
     t.boolean "hide_from_nav", default: false
     t.jsonb "public_metadata"
     t.jsonb "private_metadata"
+    t.string "pretty_name"
     t.index ["lft"], name: "index_spree_taxons_on_lft"
     t.index ["name", "parent_id", "taxonomy_id"], name: "index_spree_taxons_on_name_and_parent_id_and_taxonomy_id", unique: true
     t.index ["name"], name: "index_spree_taxons_on_name"
@@ -1599,6 +1622,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_23_091439) do
     t.index ["permalink", "parent_id", "taxonomy_id"], name: "index_spree_taxons_on_permalink_and_parent_id_and_taxonomy_id", unique: true
     t.index ["permalink"], name: "index_taxons_on_permalink"
     t.index ["position"], name: "index_spree_taxons_on_position"
+    t.index ["pretty_name"], name: "index_spree_taxons_on_pretty_name"
     t.index ["rgt"], name: "index_spree_taxons_on_rgt"
     t.index ["taxonomy_id"], name: "index_taxons_on_taxonomy_id"
   end

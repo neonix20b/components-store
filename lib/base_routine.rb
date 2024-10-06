@@ -62,12 +62,12 @@ class BaseRoutine
     end
   end
 
-  def mmm
-    BaseRoutine.cleanProperties
-    Spree::Product.all.order(:id).includes(:master).each_key do |product|
-      product.price = product.cost_price * 160
+  def self.mmm(x: 250, id: 230)
+    # BaseRoutine.cleanProperties
+    Spree::Product.where('id > ?', id).order(:id).includes(:master).each do |product|
+      product.price = product.cost_price * x
       product.save!
-      puts product.id
+      puts "[!] product.id = #{product.id}"
       product = nil
     end
   end
