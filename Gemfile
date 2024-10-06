@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby File.read('.ruby-version').strip.to_s
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '7.1.3.4'
+gem 'rails'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
@@ -80,9 +80,9 @@ gem 'solid_queue'
 gem 'solid_cache'
 
 # Spree gems
-gem 'spree', '4.9'
+gem 'spree'
 gem 'spree_backend'
-gem 'spree_emails', '4.9'
+gem 'spree_emails'
 
 gem 'deface'
 gem 'spree_auth_devise'
